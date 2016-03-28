@@ -1,0 +1,151 @@
+<html>
+<head>
+	<!-- Head (banging?) -->
+	<title>Triangulart - isometric graphic editor</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
+	<!-- Le style -->
+	<link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
+	<style id="outline-style"></style>
+</head>
+<body>
+
+	<div class="setup" id="setup">
+		<div class="form">
+			<h1>Triangulart</h1>
+			<p>This is a silly graphic editor build in JavaScript to create isometric illustrations. Triangulart is like pixel art but for triangles.<br><i>This webapp does not work with touchscreen devices, for now.</i></p>
+			<hr>
+			<div class="field">
+				<label for="setup-width">Map width</label>
+				<input type="number" id="setup-width" value="30" min="1"/>
+			</div>
+
+			<div class="field">
+				<label for="setup-width">Map height</label>
+				<input type="number" id="setup-height" value="20" min="1"/>
+			</div>
+
+			<div class="field">
+				<label for="setup-width">Triangle height (in pixels)</label>
+				<input type="number" id="setup-triangle-height" value="30" min="1"/>
+			</div>
+
+			<div class="field-orientation">
+				<label for="setup-orientation-landscape">
+					<input type="radio" name="oriantation" id="setup-orientation-landscape" value="landscape" checked="checked"/>
+					<svg version="1.1" preserveAspectRatio="xMidYMid meet" width="120" height="90" viewBox="0 0 120 78">
+						<path d="M15 0 L0 26 L30 26 Z" fill="#FFF"></path>
+						<path d="M15 0 L30 26 L45 0 Z" fill="#FFF"></path>
+						<path d="M45 0 L30 26 L60 26 Z" fill="#FFF"></path>
+						<path d="M45 0 L60 26 L75 0 Z" fill="#FFF"></path>
+						<path d="M75 0 L60 26 L90 26 Z" fill="#FFF"></path>
+						<path d="M75 0 L90 26 L105 0 Z" fill="#FFF"></path>
+						<path d="M105 0 L90 26 L120 26 Z" fill="#FFF"></path>
+						<path d="M0 26 L15 52 L30 26 Z" fill="#FFF"></path>
+						<path d="M30 26 L15 52 L45 52 Z" fill="#FFF"></path>
+						<path d="M30 26 L45 52 L60 26 Z" fill="#FFF"></path>
+						<path d="M60 26 L45 52 L75 52 Z" fill="#FFF"></path>
+						<path d="M60 26 L75 52 L90 26 Z" fill="#FFF"></path>
+						<path d="M90 26 L75 52 L105 52 Z" fill="#FFF"></path>
+						<path d="M90 26 L105 52 L120 26 Z" fill="#FFF"></path>
+						<path d="M15 52 L0 78 L30 78 Z" fill="#FFF"></path>
+						<path d="M15 52 L30 78 L45 52 Z" fill="#FFF"></path>
+						<path d="M45 52 L30 78 L60 78 Z" fill="#FFF"></path>
+						<path d="M45 52 L60 78 L75 52 Z" fill="#FFF"></path>
+						<path d="M75 52 L60 78 L90 78 Z" fill="#FFF"></path>
+						<path d="M75 52 L90 78 L105 52 Z" fill="#FFF"></path>
+						<path d="M105 52 L90 78 L120 78 Z" fill="#FFF"></path>
+					</svg>
+				</label>
+				<label for="setup-orientation-portrait">
+	  			<input type="radio" name="oriantation" id="setup-orientation-portrait" value="portrait"/>
+					<svg version="1.1" preserveAspectRatio="xMidYMid meet" width="120" height="90" viewBox="0 0 104 90">
+						<path d="M0 15 L26 0 L26 30 Z" fill="#FFF"></path>
+						<path d="M0 15 L26 30 L0 45 Z" fill="#FFF"></path>
+						<path d="M0 45 L26 30 L26 60 Z" fill="#FFF"></path>
+						<path d="M0 45 L26 60 L0 75 Z" fill="#FFF"></path>
+						<path d="M0 75 L26 60 L26 90 Z" fill="#FFF"></path>
+						<path d="M26 0 L52 15 L26 30 Z" fill="#FFF"></path>
+						<path d="M26 30 L52 15 L52 45 Z" fill="#FFF"></path>
+						<path d="M26 30 L52 45 L26 60 Z" fill="#FFF"></path>
+						<path d="M26 60 L52 45 L52 75 Z" fill="#FFF"></path>
+						<path d="M26 60 L52 75 L26 90 Z" fill="#FFF"></path>
+						<path d="M52 15 L78 0 L78 30 Z" fill="#FFF"></path>
+						<path d="M52 15 L78 30 L52 45 Z" fill="#FFF"></path>
+						<path d="M52 45 L78 30 L78 60 Z" fill="#FFF"></path>
+						<path d="M52 45 L78 60 L52 75 Z" fill="#FFF"></path>
+						<path d="M52 75 L78 60 L78 90 Z" fill="#FFF"></path>
+						<path d="M78 0 L104 15 L78 30 Z" fill="#FFF"></path>
+						<path d="M78 30 L104 15 L104 45 Z" fill="#FFF"></path>
+						<path d="M78 30 L104 45 L78 60 Z" fill="#FFF"></path>
+						<path d="M78 60 L104 45 L104 75 Z" fill="#FFF"></path>
+						<path d="M78 60 L104 75 L78 90 Z" fill="#FFF"></path>
+					</svg>
+				</label>
+			</div>
+
+			<button class="button-group" onclick="setup()">Start</button>
+		</div>
+	</div>
+
+	<!-- SVG to display -->
+	<div class="playground" id="playground"></div>
+
+	<!-- Le toolbar -->
+	<div class="toolbar">
+		<!-- RIGHT -->
+		<div class="leftbar">
+			<div class="button-group">
+				<input type="color" id="color-picker" class="color-picker" onchange="controller.updateCurrentColor();"/><button type="button" onclick="controller.addColor();">+</button>
+			</div>
+			<div class="colorlist" id="color-list"></div>
+		</div>
+		<!-- LEFT -->
+		<div class="rightbar">
+			<div class="button-group">
+				<button type="button" onclick="controller.toggleOutline();">outline</button>
+			</div>
+			<div class="button-group">
+				<button type="button" onclick="controller.load();">load</button><button type="button" onclick="controller.save();">save</button>
+			</div>
+			<div class="button-group">
+				<button type="button" onclick="controller.exportSVG();">export (SVG)</button>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Le script -->
+	<script src="triangulr.js"></script>
+	<script src="toolbar.js"></script>
+	<script type="text/javascript">
+
+		var playground, controller;
+
+		function setup () {
+			var width  = document.getElementById('setup-width').value,
+					height = document.getElementById('setup-height').value,
+					triangleHeight = document.getElementById('setup-triangle-height').value,
+					isLandscape = document.getElementById('setup-orientation-landscape').checked;
+
+			if (width < 1 || height < 1 || triangleHeight < 1) {
+				alert('Please set positive values');
+				return;
+			}
+
+			document.getElementById('setup').remove();
+
+			playground = new Triangulr('playground');
+			playground.setCanvas(width, height, triangleHeight, isLandscape);
+			controller = new Toolbar(playground);
+		}
+
+
+		// Prevent quit
+		window.onbeforeunload = function() {
+		  return "All current work will be destroyed and lost. Be sure you have saved or exported your work.";
+		}
+	</script>
+</body>
+</html>
