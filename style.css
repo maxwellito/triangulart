@@ -13,6 +13,11 @@ svg {
 svg path {
   stroke: currentColor;
   stroke-width: 0.25;
+  user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
 }
 
 button {
@@ -22,6 +27,7 @@ button {
   background: none;
   font-size: .8rem;
   line-height: 1rem;
+  cursor: pointer;
 }
 
 /* Layout */

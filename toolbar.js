@@ -73,7 +73,9 @@ Toolbar.prototype.saveFile = function (data, fileName) {
     this.downloadAnchor.href = url;
     this.downloadAnchor.download = fileName;
     this.downloadAnchor.click();
-    window.URL.revokeObjectURL(url);
+    window.setTimeout(function () {
+      window.URL.revokeObjectURL(url);
+    }, 10);
 };
 
 
