@@ -164,12 +164,9 @@ Triangulr.prototype.generateDom = function () {
 	var self = this;
 	self.color = null;
 	svgTag.addEventListener('mousedown', function () {
-			self.color = self.pickedColor;
+		self.color = self.pickedColor;
 	});
 	svgTag.addEventListener('mouseup', function () {
-		self.color = null;
-	});
-	svgTag.addEventListener('mouseleave', function () {
 		self.color = null;
 	});
 
