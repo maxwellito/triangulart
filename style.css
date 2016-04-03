@@ -86,6 +86,10 @@ button {
   border-radius: 50%;
 }
 
+.colorlist button[rel="#ffffff"]{
+  border: 1px solid gray;
+}
+
 /* Setup form */
 .setup {
   position: fixed;
