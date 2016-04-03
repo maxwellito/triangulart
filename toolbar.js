@@ -88,6 +88,10 @@ Toolbar.prototype.updateCurrentColor = function (e) {
   this.playground.pickedColor = this.colorInput.value;
 };
 
+Toolbar.prototype.eraseMode = function (e) {
+  this.playground.pickedColor = null;
+};
+
 Toolbar.prototype.addColor = function (color) {
   color = color || this.colorInput.value;
   if (this.palette.indexOf(color) !== -1) {
@@ -103,10 +107,10 @@ Toolbar.prototype.addColor = function (color) {
 
 Toolbar.prototype.toggleOutline = function () {
   if (this.isOutlineOn) {
-    this.outlineStyle.textContent = 'svg path {stroke: none;}';
+    this.outlineStyle.textContent = '.playground path {stroke: none;}';
   }
   else {
-    this.outlineStyle.textContent = 'svg path {stroke: currentColor;}';
+    this.outlineStyle.textContent = '.playground path {stroke: currentColor;}';
   }
   this.isOutlineOn = !this.isOutlineOn;
 }

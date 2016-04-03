@@ -161,22 +161,22 @@ Triangulr.prototype.generateDom = function () {
 		svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleHeight) + ' ' + (this.mapHeight * this.triangleWidth));
 	}
 
-	this.color = null;
+	this.color = false;
 	svgTag.addEventListener('mousedown', function (e) {
-			this.color = this.pickedColor;
-			listener(e);
+		this.color = this.pickedColor;
+		listener(e);
 	}.bind(this));
 	window.addEventListener('mouseup', function () {
-		this.color = null;
+		this.color = false;
 	}.bind(this));
 
 	var listener = function (e) {
 		var rel = parseInt(e.target.getAttribute('rel'), 10);
-		if (!this.color || isNaN(rel)) {
+		if (this.color === false || isNaN(rel)) {
 			return;
 		}
 		this.exportData[rel].color = this.color;
-		e.target.setAttribute('fill', this.color);
+		e.target.setAttribute('fill', this.color || this.BLANK_COLOR);
 	}.bind(this);
 
 	for(i in this.exportData) {

@@ -6,13 +6,7 @@ html, body {
   font-size: 24px;
 }
 
-svg {
-  cursor: crosshair;
-}
-
 svg path {
-  stroke: currentColor;
-  stroke-width: 0.25;
   user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
@@ -32,6 +26,7 @@ button {
 
 /* Layout */
 .playground svg {
+  cursor: crosshair;
   margin: 1rem 1rem 80px;
 }
 
@@ -49,6 +44,16 @@ button {
 }
 
 /* Component */
+.icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.playground path, .grid path {
+  stroke: currentColor;
+  stroke-width: 0.25;
+}
+
 .color-picker {
   height: 1.5rem;
   padding: 0 0 0 2px;
