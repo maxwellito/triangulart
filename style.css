@@ -83,6 +83,7 @@ button {
   height: 1rem;
   width: 1rem;
   margin: .25rem 0 .25rem .25rem;
+  border: 1px solid gray;
   border-radius: 50%;
 }
 
