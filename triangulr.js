@@ -161,25 +161,22 @@ Triangulr.prototype.generateDom = function () {
 		svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleHeight) + ' ' + (this.mapHeight * this.triangleWidth));
 	}
 
-	var self = this;
-	self.color = null;
-	svgTag.addEventListener('mousedown', function () {
-			self.color = self.pickedColor;
-	});
-	svgTag.addEventListener('mouseup', function () {
-		self.color = null;
-	});
-	svgTag.addEventListener('mouseleave', function () {
-		self.color = null;
-	});
+	this.color = null;
+	svgTag.addEventListener('mousedown', function (e) {
+			this.color = this.pickedColor;
+			listener(e);
+	}.bind(this));
+	window.addEventListener('mouseup', function () {
+		this.color = null;
+	}.bind(this));
 
 	var listener = function (e) {
 		var rel = parseInt(e.target.getAttribute('rel'), 10);
-		if (!self.color || isNaN(rel)) {
+		if (!this.color || isNaN(rel)) {
 			return;
 		}
-		this.exportData[rel].color = self.color;
-		e.target.setAttribute('fill', self.color);
+		this.exportData[rel].color = this.color;
+		e.target.setAttribute('fill', this.color);
 	}.bind(this);
 
 	for(i in this.exportData) {
