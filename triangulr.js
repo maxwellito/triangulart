@@ -143,23 +143,7 @@ Triangulr.prototype.generateDom = function () {
 		this.svgTag.remove();
 	}
 
-	var i, j, data, points, polygon;
-	var svgTag = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	var output = '';
-
-	svgTag.setAttribute('version', '1.1');
-	svgTag.setAttribute('preserveAspectRatio', 'xMinYMin slice');
-
-	if (this.isLandscape) {
-		svgTag.setAttribute('width', this.mapWidth * this.triangleWidth);
-		svgTag.setAttribute('height', this.mapHeight * this.triangleHeight);
-		svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleWidth) + ' ' + (this.mapHeight * this.triangleHeight));
-	}
-	else {
-		svgTag.setAttribute('width', this.mapWidth * this.triangleHeight);
-		svgTag.setAttribute('height', this.mapHeight * this.triangleWidth);
-		svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleHeight) + ' ' + (this.mapHeight * this.triangleWidth));
-	}
+	var svgTag = this.generateSVG();
 
 	this.color = false;
 	svgTag.addEventListener('mousedown', function (e) {
@@ -179,8 +163,38 @@ Triangulr.prototype.generateDom = function () {
 		e.target.setAttribute('fill', this.color || this.BLANK_COLOR);
 	}.bind(this);
 
+	for(var i = svgTag.childNodes.length - 1; i >= 0; i--) {
+		svgTag.childNodes[i].addEventListener('mousemove', listener);
+	}
+
+	this.svgTag = svgTag;
+	this.container.appendChild(svgTag);
+	return svgTag;
+};
+
+Triangulr.prototype.generateSVG = function (isClean) {
+	var i, data, points, polygon;
+	var svgTag = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+
+	svgTag.setAttribute('version', '1.1');
+	svgTag.setAttribute('preserveAspectRatio', 'xMinYMin slice');
+
+	if (this.isLandscape) {
+		svgTag.setAttribute('width', this.mapWidth * this.triangleWidth);
+		svgTag.setAttribute('height', this.mapHeight * this.triangleHeight);
+		svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleWidth) + ' ' + (this.mapHeight * this.triangleHeight));
+	}
+	else {
+		svgTag.setAttribute('width', this.mapWidth * this.triangleHeight);
+		svgTag.setAttribute('height', this.mapHeight * this.triangleWidth);
+		svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleHeight) + ' ' + (this.mapHeight * this.triangleWidth));
+	}
+
 	for(i in this.exportData) {
 		data = this.exportData[i];
+		if (isClean && !data.color) {
+			continue;
+		}
 		polygon = document.createElementNS('http://www.w3.org/2000/svg','path');
 		points   = 'M' + data.points[0].x + ' ' + data.points[0].y + ' ';
 		points  += 'L' + data.points[1].x + ' ' + data.points[1].y + ' ';
@@ -188,15 +202,10 @@ Triangulr.prototype.generateDom = function () {
 		polygon.setAttribute('d', points);
 		polygon.setAttribute('fill', data.color || this.BLANK_COLOR);
 		polygon.setAttribute('rel', i);
-		polygon.addEventListener('mousemove', listener);
-
 		svgTag.appendChild(polygon);
 	}
-
-	this.svgTag = svgTag;
-	this.container.appendChild(svgTag);
 	return svgTag;
-};
+}
 
 Triangulr.prototype.export = function () {
 	return {
@@ -227,7 +236,7 @@ Triangulr.prototype.import = function (data) {
 };
 
 Triangulr.prototype.exportSVG = function () {
-	return this.svgTag.outerHTML;
+	return this.generateSVG(true).outerHTML;
 };
 
 
