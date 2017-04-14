@@ -1,0 +1,50 @@
+<svg version="1.1" preserveAspectRatio="xMinYMin slice" width="210" height="130" viewBox="0 0 210 130">
+	<path class="d_1" d="M45 0 L30 26 L60 26 Z"></path>
+	<path class="d_1" d="M45 0 L60 26 L75 0 Z"></path>
+	<path class="d_2" d="M75 0 L60 26 L90 26 Z"></path>
+	<path class="d_2" d="M75 0 L90 26 L105 0 Z"></path>
+	<path class="d_3" d="M105 0 L90 26 L120 26 Z"></path>
+	<path class="d_3" d="M105 0 L120 26 L135 0 Z"></path>
+	<path class="d_4" d="M135 0 L120 26 L150 26 Z"></path>
+	<path class="d_4" d="M135 0 L150 26 L165 0 Z"></path>
+	<path class="d_5" d="M165 0 L150 26 L180 26 Z"></path>
+	<path class="d_1" d="M30 26 L15 52 L45 52 Z"></path>
+	<path class="d_1" d="M30 26 L45 52 L60 26 Z"></path>
+	<path class="d_5" d="M150 26 L165 52 L180 26 Z"></path>
+	<path class="d_6" d="M180 26 L165 52 L195 52 Z"></path>
+	<path class="d_1" d="M15 52 L30 78 L45 52 Z"></path>
+	<path class="d_2" d="M45 52 L30 78 L60 78 Z"></path>
+	<path class="d_3" d="M75 52 L60 78 L90 78 Z"></path>
+	<path class="d_5" d="M135 52 L120 78 L150 78 Z"></path>
+	<path class="d_6" d="M165 52 L150 78 L180 78 Z"></path>
+	<path class="d_6" d="M165 52 L180 78 L195 52 Z"></path>
+	<path class="d_2" d="M30 78 L45 104 L60 78 Z"></path>
+	<path class="d_3" d="M60 78 L45 104 L75 104 Z"></path>
+	<path class="d_3" d="M60 78 L75 104 L90 78 Z"></path>
+	<path class="d_4" d="M90 78 L75 104 L105 104 Z"></path>
+	<path class="d_5" d="M120 78 L105 104 L135 104 Z"></path>
+	<path class="d_5" d="M120 78 L135 104 L150 78 Z"></path>
+	<path class="d_6" d="M150 78 L135 104 L165 104 Z"></path>
+	<path class="d_6" d="M150 78 L165 104 L180 78 Z"></path>
+	<path class="d_4" d="M75 104 L90 130 L105 104 Z"></path>
+	<path class="d_5" d="M105 104 L90 130 L120 130 Z"></path>
+	<path class="d_5" d="M105 104 L120 130 L135 104 Z"></path>
+
+	<style>
+		@keyframes shade {
+			0%   {fill: #605;}
+			10%  {fill: #605;}
+			22%  {fill: #f05;}
+			36%  {fill: #005;}
+			50%  {fill: #605;}
+			100% {fill: #605;}
+		}
+
+		.d_1 { animation: shade 6s infinite; }
+		.d_2 { animation: shade 6s infinite .2s; }
+		.d_3 { animation: shade 6s infinite .4s; }
+		.d_4 { animation: shade 6s infinite .6s; }
+		.d_5 { animation: shade 6s infinite .8s; }
+		.d_6 { animation: shade 6s infinite  1s; }
+	</style>
+</svg>
