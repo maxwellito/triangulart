@@ -113,14 +113,20 @@ button {
   font-size: 0.75rem;
 }
 
-.field {
+
+
+.fields {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: .25rem;
+  flex-direction: row;
 }
 
 .field input {
-  width: 2rem;
+  font-size: 2rem;
+  border: none;
+}
+
+.field label {
+  font-size: .75rem;
 }
 
 .field-orientation {
