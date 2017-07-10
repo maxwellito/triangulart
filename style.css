@@ -1,9 +1,12 @@
 /* Generic */
 html, body {
   font-family: sans-serif;
-  color: #999;
+  color: #333935;
   margin: 0;
-  font-size: 24px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 300;
 }
 
 svg path {
@@ -98,10 +101,44 @@ button {
   z-index: 10;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.5);
+  padding: 2rem;
+  box-sizing: border-box;
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+
+
+
+.row {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.row-balanced {
+  justify-content: space-around;
+}
+
+.row > * {
+  flex-grow: 1;
+}
+
+
+
+/* large only */
+.intro-logo {
+  padding-right: 2rem;
+  border-right: 1px solid currentColor;
+  margin-right: 2rem;
+  width: 20%;
+}
+
+.intro-selection-box {
+  text-align: center;
 }
 
 .form {
