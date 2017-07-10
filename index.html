@@ -7,15 +7,36 @@
 
   <!-- Le style -->
   <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="src/components/launcher/launcher.component.css">
   <style id="outline-style"></style>
+
+    <!-- Le script -->
+  <script type="text/javascript" src="vendor/vuejs.2.3.4.js"></script>
+  <script src="triangulr.js"></script>
+  <script src="toolbar.js"></script>
+
+  <script type="text/javascript" src="src/components/launcher/launcher.component.js"></script>
+
+  <script type="text/javascript">
+    Vue.component('gogo', {
+      props: ['xx'],
+      template: '<h1>{{xx}}</h1>'
+    })
+  </script>
 </head>
 <body>
 
-  <div class="setup grid" id="setup">
+  <div id="app">
+    <launcher></launcher>
+  </div>
+  
+
+<!--   <div class="setup grid" id="setup">
     <div class="row">
       
       <object data="assets/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>
       <div>
+        <gogo xx="hallo"></gogo>
         <h1>triangulart</h1>
         <p>This is a silly graphic editor build in JavaScript to create isometric illustrations.<br>Triangulart is like pixel art but for triangles.</p>
       </div>
@@ -23,7 +44,7 @@
     <div class="row row-balanced">
       <div class="intro-selection-box">Load from a file</div>
       <div class="intro-selection-box">Start a new one</div>
-      <div class="intro-selection-box">Load from previous</div>
+      <div class="intro-selection-box">Load from previous <span style="background-color: red; color: white;" v-if="projectsAvalable" :text-content.prop="projectsAvalable" @click="alertMe"></span></div>
     </div>
     <div class="row">
       <div class="field">
@@ -37,7 +58,10 @@
       </div>
 
     </div>
-<!-- 
+
+
+
+
     <div class="form">
       <div></div>
       <object data="assets/triangulart_logo.svg" type="image/svg+xml" ></object>
@@ -77,16 +101,15 @@
         </label>
       </div>
 
-      <button class="button-group" onclick="setup()">Start</button> -->
+      <button class="button-group" onclick="setup()">Start</button>
     </div>
   </div>
 
-  <!-- SVG to display -->
   <div class="playground" id="playground"></div>
 
-  <!-- Le toolbar -->
+
   <div class="toolbar">
-    <!-- LEFT -->
+
     <div class="leftbar">
       <div class="button-group">
         <button type="button" onclick="controller.eraseMode();">
@@ -100,7 +123,9 @@
       </div>
       <div class="colorlist" id="color-list"></div>
     </div>
-    <!-- RIGHT -->
+
+
+
     <div class="rightbar">
       <div class="button-group">
         <button type="button" onclick="controller.toggleOutline();">outline</button>
@@ -118,6 +143,7 @@
       </a>
     </div>
   </div>
+   -->
 
 
   <!-- Le symbols -->
@@ -181,9 +207,25 @@
   </svg>
 
   <!-- Le script -->
-  <script src="triangulr.js"></script>
-  <script src="toolbar.js"></script>
+
   <script type="text/javascript">
+
+    // var app2 = new Vue({
+    //   el: '#setup',
+    //   data: {
+    //     projectsAvalable: 2
+    //   },
+    //   methods: {
+    //     alertMe: function () {
+    //       alert(this.projectsAvalable)
+    //     }
+    //   }
+    // })
+    // 
+    
+    new Vue({
+      el: '#app'
+    })
 
     var playground, controller;
 
@@ -206,9 +248,10 @@
     }
 
     // Prevent quit
-    window.onbeforeunload = function() {
-      return "All current work will be destroyed and lost. Be sure you have saved or exported your work.";
-    }
+    //# TEMP: enable the unload warning
+    // window.onbeforeunload = function() {
+    //   return "All current work will be destroyed and lost. Be sure you have saved or exported your work.";
+    // }
   </script>
 </body>
 </html>
