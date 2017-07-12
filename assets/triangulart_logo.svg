@@ -44,16 +44,16 @@
 
 		@keyframes rainbow {
 			0%   {stroke: #605;}
-			5%   {stroke: #605;}
+			7%   {stroke: #605;}
 
 			10%   {stroke: #E40303;}
-			15%   {stroke: #FF8C00;}
-			20%   {stroke: #FFED00;}
-			25%   {stroke: #008026;}
-			30%   {stroke: #004DFF;}
-			35%   {stroke: #750787;}
+			13%   {stroke: #FF8C00;}
+			16%   {stroke: #FFED00;}
+			19%   {stroke: #008026;}
+			22%   {stroke: #004DFF;}
+			25%   {stroke: #750787;}
 
-			40%  {stroke: #605;}
+			28%  {stroke: #605;}
 			100% {stroke: #605;}
 		}
 

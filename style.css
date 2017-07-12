@@ -17,15 +17,18 @@ svg path {
   -o-user-select: none;
 }
 
-button {
-  padding: 0.25rem;
-  color: inherit;
-  border: none;
-  background: none;
-  font-size: .8rem;
-  line-height: 1rem;
-  cursor: pointer;
+
+
+.hidden {
+  display: none;
 }
+
+
+
+
+
+
+
 
 /* Layout */
 .playground svg {
@@ -65,28 +68,43 @@ button {
   border-radius: 2px;
 }
 
+
+
+.button {
+  padding: 0.25rem;
+  color: inherit;
+  background: none;
+  font-size: .8rem;
+  line-height: 1rem;
+  cursor: pointer;
+}
+
 .colorlist, .button-group {
   display: inline-block;
 }
 
-.button-group {
+.button, .button-group {
   border: 1px solid currentColor;
   border-radius: 4px;
+}
+
+.button-group {
   min-width: 1.5rem;
   vertical-align: top;
 }
 
-.button-group button {
+.button-group .button {
   min-width: 1.5rem;
+  border: none;
   border-right: 1px solid currentColor;
   vertical-align: top;
 }
 
-.button-group button:last-child {
+.button-group .button:last-child {
   border-right: none;
 }
 
-.colorlist button {
+.colorlist .button {
   display: inline-block;
   height: 1rem;
   width: 1rem;
@@ -102,6 +120,10 @@ button {
   flex-direction: row;
   margin: 1rem 0;
   width: 100%;
+}
+
+.row-inline {
+  align-items: center;
 }
 
 .row-balanced {

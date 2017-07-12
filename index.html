@@ -8,6 +8,7 @@
   <!-- Le style -->
   <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
   <link rel="stylesheet" type="text/css" href="src/components/launcher/launcher.component.css">
+  <link rel="stylesheet" type="text/css" href="src/components/gridOrientationPicker/gridOrientationPicker.component.css">
   <style id="outline-style"></style>
 
     <!-- Le script -->
@@ -15,6 +16,8 @@
   <script src="triangulr.js"></script>
   <script src="toolbar.js"></script>
 
+  <script type="text/javascript" src="src/components/gridOrientationPicker/gridOrientationPicker.component.js"></script>
+  <script type="text/javascript" src="src/components/fileLoad/fileLoad.component.js"></script>
   <script type="text/javascript" src="src/components/launcher/launcher.component.js"></script>
 
   <script type="text/javascript">
@@ -148,57 +151,36 @@
 
   <!-- Le symbols -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+    <symbol id="action-import" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" >
+        <polyline points="30,14 38,14 38,35 30,43 10,43 10,14 18,14"/>
+        <polyline points="38,35 30,35 30,43"/>
+        <polyline points="18,9 24,3 30,9"/>
+        <line x1="24" y1="3" x2="24" y2="25"/>
+      </g>
+    </symbol>
+
+    <symbol id="action-floppydisk" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" >
+        <polygon points="42,42 6,42 6,6 36,6 42,12"/>
+        <rect x="15" y="6" width="18" height="12"/>
+        <rect x="10" y="22" width="28" height="20"/>
+        <rect x="26" y="9" width="4" height="6"/>
+      </g>
+    </symbol>
+
+    <symbol id="action-add" viewBox="0 0 48 48">
+      <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" >
+        <polygon points="14,41 4,24 14,7 34,7 44,24 34,41"/>
+        <line x1="17" y1="24" x2="31" y2="24"/>
+        <line x1="24" y1="31" x2="24" y2="17"/>
+      </g>
+    </symbol>
+
     <symbol id="icon-eraser" viewBox="0 0 16 16">
       <line fill="none" stroke="#000000" stroke-miterlimit="10" x1="8" y1="13.5" x2="15" y2="13.5"/>
       <path d="M14.36,6.88c0.39,0.39,0.39,1.02,0,1.41l-3.53,3.54L5.18,6.18l3.53-3.54c0.39-0.39,1.021-0.39,1.41,0L14.36,6.88z"/>
       <path fill="none" stroke="#000000" stroke-miterlimit="10" d="M5.18,6.18l3.53-3.54c0.39-0.39,1.021-0.39,1.41,0l4.24,4.24 c0.39,0.39,0.39,1.02,0,1.41l-3.53,3.54L9.16,13.5H4.01l-2.37-2.38c-0.39-0.39-0.39-1.021,0-1.41L5.18,6.18z"/>
-    </symbol>
-
-    <symbol class="grid" id="grid-landscape" viewBox="0 0 120 78">
-      <path d="M15 0 L0 26 L30 26 Z" fill="#FFF"></path>
-      <path d="M15 0 L30 26 L45 0 Z" fill="#FFF"></path>
-      <path d="M45 0 L30 26 L60 26 Z" fill="#FFF"></path>
-      <path d="M45 0 L60 26 L75 0 Z" fill="#FFF"></path>
-      <path d="M75 0 L60 26 L90 26 Z" fill="#FFF"></path>
-      <path d="M75 0 L90 26 L105 0 Z" fill="#FFF"></path>
-      <path d="M105 0 L90 26 L120 26 Z" fill="#FFF"></path>
-      <path d="M0 26 L15 52 L30 26 Z" fill="#FFF"></path>
-      <path d="M30 26 L15 52 L45 52 Z" fill="#FFF"></path>
-      <path d="M30 26 L45 52 L60 26 Z" fill="#FFF"></path>
-      <path d="M60 26 L45 52 L75 52 Z" fill="#FFF"></path>
-      <path d="M60 26 L75 52 L90 26 Z" fill="#FFF"></path>
-      <path d="M90 26 L75 52 L105 52 Z" fill="#FFF"></path>
-      <path d="M90 26 L105 52 L120 26 Z" fill="#FFF"></path>
-      <path d="M15 52 L0 78 L30 78 Z" fill="#FFF"></path>
-      <path d="M15 52 L30 78 L45 52 Z" fill="#FFF"></path>
-      <path d="M45 52 L30 78 L60 78 Z" fill="#FFF"></path>
-      <path d="M45 52 L60 78 L75 52 Z" fill="#FFF"></path>
-      <path d="M75 52 L60 78 L90 78 Z" fill="#FFF"></path>
-      <path d="M75 52 L90 78 L105 52 Z" fill="#FFF"></path>
-      <path d="M105 52 L90 78 L120 78 Z" fill="#FFF"></path>
-    </symbol>
-
-    <symbol class="grid" id="grid-portrait" viewBox="0 0 104 90">
-      <path d="M0 15 L26 0 L26 30 Z" fill="#FFF"></path>
-      <path d="M0 15 L26 30 L0 45 Z" fill="#FFF"></path>
-      <path d="M0 45 L26 30 L26 60 Z" fill="#FFF"></path>
-      <path d="M0 45 L26 60 L0 75 Z" fill="#FFF"></path>
-      <path d="M0 75 L26 60 L26 90 Z" fill="#FFF"></path>
-      <path d="M26 0 L52 15 L26 30 Z" fill="#FFF"></path>
-      <path d="M26 30 L52 15 L52 45 Z" fill="#FFF"></path>
-      <path d="M26 30 L52 45 L26 60 Z" fill="#FFF"></path>
-      <path d="M26 60 L52 45 L52 75 Z" fill="#FFF"></path>
-      <path d="M26 60 L52 75 L26 90 Z" fill="#FFF"></path>
-      <path d="M52 15 L78 0 L78 30 Z" fill="#FFF"></path>
-      <path d="M52 15 L78 30 L52 45 Z" fill="#FFF"></path>
-      <path d="M52 45 L78 30 L78 60 Z" fill="#FFF"></path>
-      <path d="M52 45 L78 60 L52 75 Z" fill="#FFF"></path>
-      <path d="M52 75 L78 60 L78 90 Z" fill="#FFF"></path>
-      <path d="M78 0 L104 15 L78 30 Z" fill="#FFF"></path>
-      <path d="M78 30 L104 15 L104 45 Z" fill="#FFF"></path>
-      <path d="M78 30 L104 45 L78 60 Z" fill="#FFF"></path>
-      <path d="M78 60 L104 45 L104 75 Z" fill="#FFF"></path>
-      <path d="M78 60 L104 75 L78 90 Z" fill="#FFF"></path>
     </symbol>
 
     <symbol viewBox="0 0 128 128" id="icon-github">

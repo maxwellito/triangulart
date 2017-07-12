@@ -23,7 +23,7 @@ Vue.component('file-load', {
   },
   template: '\
     <label>\
-      <span class="button">Upload</span>\
+      <slot></slot>\
       <input type="file" @change="load($event)" class="hidden"/>\
     </label>'
 })
