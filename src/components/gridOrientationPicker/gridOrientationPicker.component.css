@@ -1,0 +1,12 @@
+.grid-orientation-picker-svg {
+  width: 4rem;
+  height: 4rem;
+}
+
+.grid-orientation-picker-svg path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linejoin:round;
+  stroke-miterlimit:10;
+}
