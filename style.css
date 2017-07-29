@@ -1,8 +1,11 @@
 /* Generic */
 html, body {
   font-family: sans-serif;
-  color: #333935;
   margin: 0;
+}
+
+html, body, input {
+  color: #333935;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -22,7 +25,6 @@ svg path {
 .hidden {
   display: none;
 }
-
 
 
 
@@ -70,14 +72,26 @@ svg path {
 
 
 
+
+
+
+
+
 .button {
-  padding: 0.25rem;
+  padding: 0.25rem .375rem;
   color: inherit;
   background: none;
-  font-size: .8rem;
-  line-height: 1rem;
+  line-height: 1;
   cursor: pointer;
 }
+
+.button:active {
+  background-color: rgba(0,0,0,.25);
+}
+.button:active, .button:focus {
+  outline: none;
+}
+
 
 .colorlist, .button-group {
   display: inline-block;
@@ -175,18 +189,4 @@ svg path {
 
 .field-orientation {
   text-align: center;
-}
-
-label > input{ /* HIDE RADIO */
-  visibility: hidden; /* Makes input not-clickable */
-  position: absolute; /* Remove input from document flow */
-}
-label > input + svg{ /* IMAGE STYLES */
-  cursor:pointer;
-  padding: .5rem;
-  border-radius: .25rem;
-  border:2px solid transparent;
-}
-label > input:checked + svg{ /* (RADIO CHECKED) IMAGE STYLES */
-  border:2px solid #1af;
 }
