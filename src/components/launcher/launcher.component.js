@@ -27,6 +27,7 @@ Vue.component('launcher', {
              Please choose one of the following action</p>\
         </div>\
       </div>\
+      <workspace-browser/>\
       <new-canvas-form/>\
       <div class="row row-balanced">\
         <div class="launcher-action-box">\
