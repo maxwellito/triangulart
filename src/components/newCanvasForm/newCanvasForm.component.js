@@ -9,14 +9,14 @@ Vue.component('new-canvas-form', {
   },
   methods: {
     create: function () {
-      this.$emit('new-canvas', {
+      this.$emit('newCanvas', {
         width: this.width,
         height: this.height,
         isLandscape: this.isLandscape
       })
     },
     cancel: function () {
-      this.$emit('back')
+      this.$emit('setView', 'intro')
     }
   },
   template: '\
@@ -39,7 +39,7 @@ Vue.component('new-canvas-form', {
         <grid-orientation-picker @update:isLandscape="val => isLandscape = val"></grid-orientation-picker>\
       </div>\
       <div>\
-        <button class="button">Back</button>\
+        <button class="button" @click="cancel">Back</button>\
         <button class="button">GO!</button>\
       </div>\
     </div>'

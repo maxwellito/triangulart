@@ -14,7 +14,7 @@ Vue.component('file-load', {
           this.$emit('error', e)
           return
         }
-        this.$emit('load', config)
+        this.$emit('jsonLoaded', config)
       })
 
       // Read the text file

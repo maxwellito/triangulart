@@ -31,15 +31,3 @@
   height: 72px;
   margin: 0 auto 1rem;
 }
-
-.notif {
-  display: inline-block;
-  min-width: .6em;
-  height: 1em;
-  border-radius: .7em;
-  padding: .2em .4em;
-  line-height: 1.2;
-  color: #fff;
-  background-color: #f00;
-  text-align: center;
-}

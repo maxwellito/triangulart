@@ -1,55 +1,29 @@
 Vue.component('launcher', {
-  props: ['foo'],
   data: function () {
     return {
-      indexes: storage.loadIndexes()
+      view: 'intro'
     }
   },
   methods: {
-    configLoaded: function (data) {
-      alert(data)
+    setView: function (view) {
+      console.log('::', view)
+      this.view = view
     },
-    startNew: function () {
-
+    loadWorkspaceFromFile: function (data) {
+      alert('Load workspace')
     },
-    loadPrevious: function () {
-
-    }
-  },
-  computed: {
-    projectsAvalable: function () {
-      return this.indexes.length
+    loadWorkspaceFromStorage: function (data) {
+      alert('Load workspace')
+    },
+    newWorkspace: function (data) {
+      alert('New workspace')
     }
   },
   template: '\
-    <div class="launcher grid">\
-      <div class="row row-inline">\
-        <object data="assets/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>\
-        <div>\
-          <h1>triangulart</h1>\
-          <p>This is a silly graphic editor build in JavaScript to create isometric illustrations.<br>\
-             Triangulart is like pixel art but for triangles.<br><br>\
-             Please choose one of the following action</p>\
-        </div>\
-      </div>\
-      <workspace-browser/>\
-      <new-canvas-form/>\
-      <div class="row row-balanced">\
-        <div class="launcher-action-box">\
-          <file-load @load="configLoaded">\
-            <svg class="launcher-action-icon"><use xlink:href="#action-import"></use></svg>\
-            <span>Upload project</span>\
-          </file-load>\
-        </div>\
-        <div class="launcher-action-box">\
-          <svg @load="startNew" class="launcher-action-icon"><use xlink:href="#action-add"></use></svg>\
-          <span @load="startNew">Start a new canvas</span>\
-        </div>\
-        <div class="launcher-action-box">\
-          <svg @load="loadPrevious" class="launcher-action-icon"><use xlink:href="#action-floppydisk"></use></svg>\
-          <span @load="loadPrevious">Load previous project</span> \
-          <span v-if="projectsAvalable" :text-content.prop="projectsAvalable" class="notif"></span>\
-        </div>\
-      </div>\
+    <div>\
+      <h1>{{ view }}</h1>\
+      <intro @setView="setView" @loadWorkspace="loadWorkspaceFromFile" v-if="view === \'intro\'"/>\
+      <new-canvas-form @setView="setView" @newCanvas="newWorkspace" v-if="view === \'create\'"/>\
+      <workspace-browser @setView="setView" @loadWorkspace="loadWorkspaceFromStorage" v-if="view === \'workspace\'"/>\
     </div>'
   })
