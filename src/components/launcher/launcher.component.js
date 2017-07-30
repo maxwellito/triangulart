@@ -20,8 +20,7 @@ Vue.component('launcher', {
     }
   },
   template: '\
-    <div>\
-      <h1>{{ view }}</h1>\
+    <div class="launcher">\
       <intro @setView="setView" @loadWorkspace="loadWorkspaceFromFile" v-if="view === \'intro\'"/>\
       <new-canvas-form @setView="setView" @newCanvas="newWorkspace" v-if="view === \'create\'"/>\
       <workspace-browser @setView="setView" @loadWorkspace="loadWorkspaceFromStorage" v-if="view === \'workspace\'"/>\

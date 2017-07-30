@@ -6,6 +6,9 @@ Vue.component('workspace-browser', {
     }
   },
   methods: {
+    cancel: function () {
+      this.$emit('setView', 'intro')
+    },
     resumeWorkspace: function (item) {
       this.$emit('load-workspace', item.id)
     },
@@ -27,22 +30,27 @@ Vue.component('workspace-browser', {
     }
   },
   template: '\
-    <div>\
-      <h3>Choose your saved workspace</h3>\
-      <table class="table workspace-browser-list">\
-        <tr v-for="index in sortedIndexes" :key="index.id">\
-          <td class="workspace-browser-list-label" @click="resumeWorkspace(index)">\
-            <span>{{index.name}}</span> \
-            <small>updated {{index.date | timeAgo}}</small>\
-          </td>\
-          <td class="workspace-browser-list-action">\
-            <span @click="renameWorkspace(index)">&#182;</span>\
-          </td>\
-          <td class="workspace-browser-list-action">\
-            <span @click="deleteWorkspace(index)">&#215;</span>\
-          </td>\
-        </tr>\
-      </table>\
+    <div class="launcher-content">\
+      <h3 class="row">Choose your saved workspace</h3>\
+      <div class="row">\
+        <table class="table workspace-browser-list">\
+          <tr v-for="index in sortedIndexes" :key="index.id">\
+            <td class="workspace-browser-list-label" @click="resumeWorkspace(index)">\
+              <span>{{index.name}}</span> \
+              <small>updated {{index.date | timeAgo}}</small>\
+            </td>\
+            <td class="workspace-browser-list-action">\
+              <span @click="renameWorkspace(index)">&#182;</span>\
+            </td>\
+            <td class="workspace-browser-list-action">\
+              <span @click="deleteWorkspace(index)">&#215;</span>\
+            </td>\
+          </tr>\
+        </table>\
+      </div>\
+      <div>\
+        <button @click="cancel" class="button">Back</button>\
+      </div>\
     </div>'
 })
 

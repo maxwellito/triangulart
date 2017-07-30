@@ -21,7 +21,7 @@ Vue.component('intro', {
     }
   },
   template: '\
-    <div>\
+    <div class="launcher-content">\
       <div class="row row-inline">\
         <object data="assets/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>\
         <div>\

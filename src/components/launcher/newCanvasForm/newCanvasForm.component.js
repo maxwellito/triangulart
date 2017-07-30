@@ -20,7 +20,7 @@ Vue.component('new-canvas-form', {
     }
   },
   template: '\
-    <div>\
+    <div class="launcher-content">\
       <div class="row">\
         <label>\
           <div class="field">\
