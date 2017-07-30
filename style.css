@@ -227,3 +227,15 @@ svg path {
   background-color: #f00;
   text-align: center;
 }
+
+
+
+.fade-enter-active{
+  transition: opacity .25s linear .25s;
+}
+.fade-leave-active {
+  transition: opacity .25s
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0
+}

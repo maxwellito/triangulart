@@ -21,8 +21,10 @@ Vue.component('launcher', {
   },
   template: '\
     <div class="launcher">\
-      <intro @setView="setView" @loadWorkspace="loadWorkspaceFromFile" v-if="view === \'intro\'"/>\
-      <new-canvas-form @setView="setView" @newCanvas="newWorkspace" v-if="view === \'create\'"/>\
-      <workspace-browser @setView="setView" @loadWorkspace="loadWorkspaceFromStorage" v-if="view === \'workspace\'"/>\
+      <transition name="fade">\
+        <intro @setView="setView" @loadWorkspace="loadWorkspaceFromFile" v-if="view === \'intro\'"/>\
+        <new-canvas-form @setView="setView" @newCanvas="newWorkspace" v-if="view === \'create\'"/>\
+        <workspace-browser @setView="setView" @loadWorkspace="loadWorkspaceFromStorage" v-if="view === \'workspace\'"/>\
+      </transition>\
     </div>'
   })
