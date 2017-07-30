@@ -6,25 +6,24 @@ Vue.component('launcher', {
   },
   methods: {
     setView: function (view) {
-      console.log('::', view)
       this.view = view
     },
-    loadWorkspaceFromFile: function (data) {
-      alert('Load workspace')
+    loadWorkspaceFile: function (data) {
+      this.$emit('loadWorkspaceFile', data)
     },
-    loadWorkspaceFromStorage: function (data) {
-      alert('Load workspace')
+    loadWorkspaceIndex: function (data) {
+      this.$emit('loadWorkspaceIndex', data)
     },
-    newWorkspace: function (data) {
-      alert('New workspace')
+    newCanvas: function (data) {
+      this.$emit('newCanvas', data)
     }
   },
   template: '\
     <div class="launcher">\
       <transition name="fade">\
-        <intro @setView="setView" @loadWorkspace="loadWorkspaceFromFile" v-if="view === \'intro\'"/>\
-        <new-canvas-form @setView="setView" @newCanvas="newWorkspace" v-if="view === \'create\'"/>\
-        <workspace-browser @setView="setView" @loadWorkspace="loadWorkspaceFromStorage" v-if="view === \'workspace\'"/>\
+        <intro @setView="setView" @loadWorkspaceFile="loadWorkspaceFile" v-if="view === \'intro\'"/>\
+        <new-canvas-form @newCanvas="newCanvas" @setView="setView" v-if="view === \'create\'"/>\
+        <workspace-browser @loadWorkspaceIndex="loadWorkspaceIndex" @setView="setView" v-if="view === \'workspace\'"/>\
       </transition>\
     </div>'
   })

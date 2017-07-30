@@ -16,9 +16,9 @@
 
     <!-- Le script -->
   <script type="text/javascript" src="vendor/vuejs.2.3.4.js"></script>
-  <script src="triangulr.js"></script>
-  <script src="toolbar.js"></script>
 
+  <script src="src/services/triangulr.js"></script>
+  <script src="src/services/toolbar.js"></script>
   <script src="src/services/storage.js"></script>
 
   <script src="src/components/launcher/newCanvasForm/gridOrientationPicker/gridOrientationPicker.component.js"></script>
@@ -27,13 +27,17 @@
   <script src="src/components/launcher/intro/intro.component.js"></script>
   <script src="src/components/launcher/workspaceBrowser/workspaceBrowser.component.js"></script>
   <script src="src/components/launcher/launcher.component.js"></script>
+  <script src="src/components/workspace/workspace.component.js"></script>
+  <script src="src/app.js"></script>
   
 </head>
 <body>
 
   <div id="app">
-    <launcher></launcher>
+    <app></app>
   </div>
+
+  <div id="playground"></div>
   
 
 <!--   <div class="setup grid" id="setup">

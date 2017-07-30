@@ -9,8 +9,9 @@ Vue.component('workspace-browser', {
     cancel: function () {
       this.$emit('setView', 'intro')
     },
-    resumeWorkspace: function (item) {
-      this.$emit('load-workspace', item.id)
+    resumeWorkspace: function (id) {
+      console.log('Emitation', id)
+      this.$emit('loadWorkspaceIndex', id)
     },
     renameWorkspace: function (item) {
       let newName = window.prompt(`Enter the new name for "${item.name}"`, item.name)
@@ -35,7 +36,7 @@ Vue.component('workspace-browser', {
       <div class="row">\
         <table class="table workspace-browser-list">\
           <tr v-for="index in sortedIndexes" :key="index.id">\
-            <td class="workspace-browser-list-label" @click="resumeWorkspace(index)">\
+            <td class="workspace-browser-list-label" @click="resumeWorkspace(index.id)">\
               <span>{{index.name}}</span> \
               <small>updated {{index.date | timeAgo}}</small>\
             </td>\

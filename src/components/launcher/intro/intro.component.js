@@ -6,7 +6,7 @@ Vue.component('intro', {
   },
   methods: {
     configLoaded: function (data) {
-      this.$emit('loadWorkspace', data)
+      this.$emit('loadWorkspaceConfig', data)
     },
     startNew: function () {
       this.$emit('setView', 'create')
