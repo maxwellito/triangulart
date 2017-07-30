@@ -48,7 +48,10 @@ Vue.component('workspace-browser', {
 
 Vue.filter('timeAgo', function (value) {
   let gap = (+(new Date()) - value) / 1000
-  if (gap < 60) {
+  if (gap < 2) {
+    return 'just now'
+  }
+  else if (gap < 60) {
     return Math.floor(gap) + 's ago'
   }
   else if (gap < 3600) {
