@@ -7,29 +7,7 @@
 
   <!-- Le style -->
   <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
-  <link rel="stylesheet" type="text/css" href="src/components/launcher/launcher.component.css">
-  <link rel="stylesheet" type="text/css" href="src/components/launcher/newCanvasForm/gridOrientationPicker/gridOrientationPicker.component.css">
-  <link rel="stylesheet" type="text/css" href="src/components/launcher/newCanvasForm/newCanvasForm.component.css">
-  <link rel="stylesheet" type="text/css" href="src/components/launcher/workspaceBrowser/workspaceBrowser.component.css">
 
-  <style id="outline-style"></style>
-
-    <!-- Le script -->
-  <script type="text/javascript" src="vendor/vuejs.2.3.4.js"></script>
-
-  <script src="src/services/triangulr.js"></script>
-  <script src="src/services/toolbar.js"></script>
-  <script src="src/services/storage.js"></script>
-
-  <script src="src/components/launcher/newCanvasForm/gridOrientationPicker/gridOrientationPicker.component.js"></script>
-  <script src="src/components/launcher/newCanvasForm/newCanvasForm.component.js"></script>
-  <script src="src/components/launcher/intro/fileLoad/fileLoad.component.js"></script>
-  <script src="src/components/launcher/intro/intro.component.js"></script>
-  <script src="src/components/launcher/workspaceBrowser/workspaceBrowser.component.js"></script>
-  <script src="src/components/launcher/launcher.component.js"></script>
-  <script src="src/components/workspace/workspace.component.js"></script>
-  <script src="src/app.js"></script>
-  
 </head>
 <body>
 
@@ -38,87 +16,11 @@
   </div>
 
   <div id="playground"></div>
-  
 
-<!--   <div class="setup grid" id="setup">
-    <div class="row">
-      
-      <object data="assets/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>
-      <div>
-        <gogo xx="hallo"></gogo>
-        <h1>triangulart</h1>
-        <p>This is a silly graphic editor build in JavaScript to create isometric illustrations.<br>Triangulart is like pixel art but for triangles.</p>
-      </div>
-    </div>
-    <div class="row row-balanced">
-      <div class="intro-selection-box">Load from a file</div>
-      <div class="intro-selection-box">Start a new one</div>
-      <div class="intro-selection-box">Load from previous <span style="background-color: red; color: white;" v-if="projectsAvalable" :text-content.prop="projectsAvalable" @click="alertMe"></span></div>
-    </div>
-    <div class="row">
-      <div class="field">
-        <input type="number" id="setup-width" value="30" min="1"/>
-        <label for="setup-width">↔ Map width</label>
-      </div>
-
-      <div class="field">
-        <input type="number" id="setup-height" value="20" min="1"/>
-        <label for="setup-width">↕ Map height</label>
-      </div>
-
-    </div>
-
-
-
-
-    <div class="form">
-      <div></div>
-      <object data="assets/triangulart_logo.svg" type="image/svg+xml" ></object>
-      <h1>Triangulart</h1>
-      <p>This is a silly graphic editor build in JavaScript to create isometric illustrations. Triangulart is like pixel art but for triangles.<br><i>This webapp does not work with touchscreen devices, for now.</i></p>
-      <hr>
-      <div class="fields">
-        <div class="field">
-          <input type="number" id="setup-width" value="30" min="1"/>
-          <label for="setup-width">Map width</label>
-        </div>
-
-        <div class="field">
-          <input type="number" id="setup-height" value="20" min="1"/>
-          <label for="setup-width">Map height</label>
-        </div>
-
-        <div class="field">
-          <input type="number" id="setup-triangle-height" value="30" min="1"/>
-          <label for="setup-width">Line height (px)</label>
-        </div>
-      </div>
-      
-
-      <div class="field-orientation">
-        <label for="setup-orientation-landscape">
-          <input type="radio" name="oriantation" id="setup-orientation-landscape" value="landscape" checked="checked"/>
-          <svg alt="Orientation landscape" width="120" height="90">
-            <use xlink:href="#grid-landscape"></use>
-          </svg>
-        </label>
-        <label for="setup-orientation-portrait">
-          <input type="radio" name="oriantation" id="setup-orientation-portrait" value="portrait"/>
-          <svg alt="Orientation portrait" width="120" height="90">
-            <use xlink:href="#grid-portrait"></use>
-          </svg>
-        </label>
-      </div>
-
-      <button class="button-group" onclick="setup()">Start</button>
-    </div>
-  </div>
-
+  <!--
   <div class="playground" id="playground"></div>
 
-
   <div class="toolbar">
-
     <div class="leftbar">
       <div class="button-group">
         <button type="button" onclick="controller.eraseMode();">
@@ -132,8 +34,6 @@
       </div>
       <div class="colorlist" id="color-list"></div>
     </div>
-
-
 
     <div class="rightbar">
       <div class="button-group">
@@ -152,8 +52,7 @@
       </a>
     </div>
   </div>
-   -->
-
+  -->
 
   <!-- Le symbols -->
   <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -195,51 +94,10 @@
   </svg>
 
   <!-- Le script -->
+  <script src="src/services/triangulr.js"></script>
+  <script src="src/services/toolbar.js"></script>
+  <script src="src/services/storage.js"></script>
+  <script src="/dist/build.js"></script>
 
-  <script type="text/javascript">
-
-    // var app2 = new Vue({
-    //   el: '#setup',
-    //   data: {
-    //     projectsAvalable: 2
-    //   },
-    //   methods: {
-    //     alertMe: function () {
-    //       alert(this.projectsAvalable)
-    //     }
-    //   }
-    // })
-    // 
-    
-    new Vue({
-      el: '#app'
-    })
-
-    var playground, controller;
-
-    function setup () {
-      var width  = document.getElementById('setup-width').value,
-          height = document.getElementById('setup-height').value,
-          triangleHeight = 30,//document.getElementById('setup-triangle-height').value,
-          isLandscape = document.getElementById('setup-orientation-landscape').checked;
-
-      if (width < 1 || height < 1 || triangleHeight < 1) {
-        alert('Please set positive values');
-        return;
-      }
-
-      document.getElementById('setup').remove();
-
-      playground = new Triangulr('playground');
-      playground.setCanvas(width, height, triangleHeight, isLandscape);
-      controller = new Toolbar(playground);
-    }
-
-    // Prevent quit
-    //# TEMP: enable the unload warning
-    // window.onbeforeunload = function() {
-    //   return "All current work will be destroyed and lost. Be sure you have saved or exported your work.";
-    // }
-  </script>
 </body>
 </html>

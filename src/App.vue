@@ -1,13 +1,34 @@
-var playground, controller;
+<template>
+  <div>
+    <transition name="fade">
+      <launcher v-if="!workspace" 
+        @loadWorkspaceFile="loadWorkspaceFromFile" 
+        @newCanvas="newWorkspace" 
+        @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
+      <workspace v-if="workspace" />
+    </transition>
+  </div>
+</template>
 
-Vue.component('app', {
-  data: function () {
+<script>
+import Launcher from './components/launcher/Launcher.vue'
+import Workspace from './components/workspace/Workspace.vue'
+
+var playground, controller; 
+
+export default {
+  name: 'app',
+  components: {
+    Launcher,
+    Workspace
+  },
+  data () {
     return {
       onPlay: false,
       workspace: null
     }
   },
-  created: function () {
+  created () {
     playground = new Triangulr('playground');
     controller = new Toolbar(playground);
   },
@@ -32,15 +53,9 @@ Vue.component('app', {
       this.workspace = storage.createItem(data.name || 'untitled')
       storage.updateItem(this.workspace.id, JSON.stringify(playground.export()))
     }
-  },
-  template: '\
-    <div>\
-      <transition name="fade">\
-        <launcher v-if="!workspace" \
-          @loadWorkspaceFile="loadWorkspaceFromFile" \
-          @newCanvas="newWorkspace" \
-          @loadWorkspaceIndex="loadWorkspaceFromStorage"/>\
-        <workspace v-if="workspace" />\
-      </transition>\
-    </div>'
-  })
+  }
+}
+</script>
+
+<style>
+</style>

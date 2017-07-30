@@ -1,4 +1,14 @@
-Vue.component('file-load', {
+<template>
+  <label>
+    <slot></slot>
+    <input type="file" @change="load($event)" class="hidden"/>
+  </label>
+</template>
+
+<script>
+
+export default {
+  name: 'file-load',
   methods: {
     load: function (event) {
       var files = event.currentTarget.files
@@ -20,10 +30,6 @@ Vue.component('file-load', {
       // Read the text file
       confReader.readAsText(file)
     }
-  },
-  template: '\
-    <label>\
-      <slot></slot>\
-      <input type="file" @change="load($event)" class="hidden"/>\
-    </label>'
-})
+  }
+}
+</script>
