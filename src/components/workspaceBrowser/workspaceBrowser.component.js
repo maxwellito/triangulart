@@ -6,11 +6,19 @@ Vue.component('workspace-browser', {
     }
   },
   methods: {
-    resumeWorkspace: function (id) {
-      this.$emit('load-workspace', id)
+    resumeWorkspace: function (item) {
+      this.$emit('load-workspace', item.id)
     },
-    deleteWorkspace: function (id) {
-      storage.deleteItem(id)
+    renameWorkspace: function (item) {
+      let newName = window.prompt(`Enter the new name for "${item.name}"`, item.name)
+      if (newName != null) {
+        storage.renameItem(item.id, newName)
+      }
+    },
+    deleteWorkspace: function (item) {
+      if (window.confirm(`Are you sure to delete "${item.name}" ?`)) {
+        storage.deleteItem(item.id)
+      }
     }
   },
   computed: {
@@ -19,12 +27,23 @@ Vue.component('workspace-browser', {
     }
   },
   template: '\
-    <table>\
-      <tr v-for="index in sortedIndexes" :key="index.id">\
-        <td @click="resumeWorkspace(index.id)">{{index.name}} <small>updated on {{index.date | timeAgo}}</small></td>\
-        <td @click="deleteWorkspace(index.id)">Delete</td>\
-      </tr>\
-    </table>'
+    <div>\
+      <h3>Choose your saved workspace</h3>\
+      <table class="table workspace-browser-list">\
+        <tr v-for="index in sortedIndexes" :key="index.id">\
+          <td class="workspace-browser-list-label" @click="resumeWorkspace(index)">\
+            <span>{{index.name}}</span> \
+            <small>updated {{index.date | timeAgo}}</small>\
+          </td>\
+          <td class="workspace-browser-list-action">\
+            <span @click="renameWorkspace(index)">&#182;</span>\
+          </td>\
+          <td class="workspace-browser-list-action">\
+            <span @click="deleteWorkspace(index)">&#215;</span>\
+          </td>\
+        </tr>\
+      </table>\
+    </div>'
 })
 
 Vue.filter('timeAgo', function (value) {

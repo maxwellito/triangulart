@@ -1,0 +1,19 @@
+.workspace-browser-list {
+  width: 100%;
+  max-width: 600px;
+  margin: auto;
+}
+
+.workspace-browser-list-label {
+  font-size: 1.25rem;
+}
+
+.workspace-browser-list-action {
+  width: 2rem;
+  font-size: 1.25rem;
+  text-align: right;
+}
+
+.workspace-browser-list td * {
+  cursor: pointer;
+}

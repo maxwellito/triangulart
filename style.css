@@ -12,6 +12,11 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 300;
 }
 
+small {
+  font-size: .75em;
+  opacity: .75;
+}
+
 svg path {
   user-select: none;
   -moz-user-select: none;
@@ -72,6 +77,21 @@ svg path {
 
 
 
+
+
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table td {
+  padding: .5rem 0;
+}
+
+.table tr + tr td {
+  border-top: 1px solid currentColor;
+}
 
 
 

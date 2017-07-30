@@ -2,7 +2,7 @@ Vue.component('launcher', {
   props: ['foo'],
   data: function () {
     return {
-      projectsAvalable: 2
+      indexes: storage.loadIndexes()
     }
   },
   methods: {
@@ -14,6 +14,11 @@ Vue.component('launcher', {
     },
     loadPrevious: function () {
 
+    }
+  },
+  computed: {
+    projectsAvalable: function () {
+      return this.indexes.length
     }
   },
   template: '\
@@ -42,7 +47,8 @@ Vue.component('launcher', {
         </div>\
         <div class="launcher-action-box">\
           <svg @load="loadPrevious" class="launcher-action-icon"><use xlink:href="#action-floppydisk"></use></svg>\
-          <span @load="loadPrevious">Load previous project</span> <span v-if="projectsAvalable" :text-content.prop="projectsAvalable" class="notif">2</span>\
+          <span @load="loadPrevious">Load previous project</span> \
+          <span v-if="projectsAvalable" :text-content.prop="projectsAvalable" class="notif"></span>\
         </div>\
       </div>\
     </div>'
