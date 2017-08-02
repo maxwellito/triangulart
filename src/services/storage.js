@@ -90,3 +90,5 @@ var storage = {
     this.saveIndexes()
   }
 }
+
+export default storage

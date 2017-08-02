@@ -25,6 +25,8 @@
 
 <script>
 
+import storage from '../../../services/storage.js'
+
 export default {
   name: 'workspace-browser',
   data () {

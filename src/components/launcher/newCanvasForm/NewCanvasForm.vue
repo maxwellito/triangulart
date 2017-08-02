@@ -18,8 +18,9 @@
       <grid-orientation-picker @update:isLandscape="switchOrientation"></grid-orientation-picker>
     </div>
     <div>
+      <input type="text" v-model="name">
       <button class="button" @click="cancel">Back</button>
-      <button class="button">GO!</button>
+      <button class="button" @click="create">GO!</button>
     </div>
   </div>
 </template>
@@ -37,15 +38,18 @@ export default {
     return {
       width: 30,
       height: 20,
-      isLandscape: true
+      isLandscape: true,
+      name: 'untitled'
     }
   },
   methods: {
     create: function () {
+      console.log(42)
       this.$emit('newCanvas', {
         width: this.width,
         height: this.height,
-        isLandscape: this.isLandscape
+        isLandscape: this.isLandscape,
+        name: this.name
       })
     },
     cancel: function () {
@@ -61,11 +65,13 @@ export default {
 <style lang="scss">
 
 .field-icon {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .field-input {
   max-width: 3em;
+  font-size: 2rem;
+  border: none;
 }
 
 .field-input:active, .field-input:focus{

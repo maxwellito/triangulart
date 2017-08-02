@@ -11,6 +11,11 @@
 </template>
 
 <script>
+
+import storage from './services/storage.js'
+import Toolbar from './services/toolbar.js'
+import Triangulr from './services/triangulr.js'
+
 import Launcher from './components/launcher/Launcher.vue'
 import Workspace from './components/workspace/Workspace.vue'
 

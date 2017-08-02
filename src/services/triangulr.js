@@ -238,3 +238,5 @@ Triangulr.prototype.import = function (data) {
 Triangulr.prototype.exportSVG = function () {
   return this.generateSVG(true).outerHTML;
 };
+
+export default Triangulr

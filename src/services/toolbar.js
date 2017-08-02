@@ -114,3 +114,5 @@ Toolbar.prototype.toggleOutline = function () {
   }
   this.isOutlineOn = !this.isOutlineOn;
 }
+
+export default Toolbar

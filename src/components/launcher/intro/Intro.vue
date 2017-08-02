@@ -31,6 +31,7 @@
 
 <script>
 
+import storage from '../../../services/storage.js'
 import FileLoad from './fileLoad/FileLoad.vue'
 
 export default {
@@ -45,12 +46,15 @@ export default {
   },
   methods: {
     configLoaded: function (data) {
+      console.log('loadWorkspaceConfig', data)
       this.$emit('loadWorkspaceConfig', data)
     },
     startNew: function () {
+      console.log('setView', 'create')
       this.$emit('setView', 'create')
     },
     loadPrevious: function () {
+      console.log('setView', 'workspace')
       this.$emit('setView', 'workspace')
     }
   },
@@ -61,3 +65,13 @@ export default {
   }
 }
 </script>
+
+<style>
+
+.intro-logo {
+  padding-right: 2rem;
+  border-right: 1px solid currentColor;
+  margin-right: 2rem;
+  width: 20%;
+}
+</style>

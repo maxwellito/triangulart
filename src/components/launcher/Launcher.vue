@@ -31,12 +31,15 @@ export default {
       this.view = view
     },
     loadWorkspaceFile: function (data) {
+      console.log('loadWorkspaceFile', data)
       this.$emit('loadWorkspaceFile', data)
     },
     loadWorkspaceIndex: function (data) {
+      console.log('loadWorkspaceIndex', data)
       this.$emit('loadWorkspaceIndex', data)
     },
     newCanvas: function (data) {
+      console.log('newCanvas', data)
       this.$emit('newCanvas', data)
     }
   }
