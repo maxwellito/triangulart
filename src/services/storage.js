@@ -64,7 +64,7 @@ var storage = {
   updateItem: function (id, data) {
     var item = this.getIndex(id)
     item.date = +(new Date())
-    localStorage.setItem(INDEX_BASE_KEY + id, data)
+    localStorage.setItem(INDEX_BASE_KEY + id, JSON.stringify(data))
   },
 
   createItem: function (name) {

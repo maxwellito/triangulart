@@ -19,7 +19,7 @@ import Triangulr from './services/triangulr.js'
 import Launcher from './components/launcher/Launcher.vue'
 import Workspace from './components/workspace/Workspace.vue'
 
-var playground, controller; 
+var playground, controller;
 
 export default {
   name: 'app',
@@ -45,18 +45,18 @@ export default {
       console.log('loadWorkspaceFromFile', data)
       playground.import(data)
       this.workspace = storage.createItem('imported file')
-      storage.updateItem(this.workspace.id, JSON.stringify(playground.export()))
+      storage.updateItem(this.workspace.id, playground.export())
     },
     loadWorkspaceFromStorage: function (id) {
       console.log('loadWorkspaceFromStorage', id)
       this.workspace = {id}
-      playground.import(JSON.parse(storage.getItem(id)))
+      playground.import(storage.getItem(id))
     },
     newWorkspace: function (data) {
       console.log('newWorkspace', data)
       playground.setCanvas(data.width, data.height, 30, data.isLandscape);
       this.workspace = storage.createItem(data.name || 'untitled')
-      storage.updateItem(this.workspace.id, JSON.stringify(playground.export()))
+      storage.updateItem(this.workspace.id, playground.export())
     }
   }
 }
