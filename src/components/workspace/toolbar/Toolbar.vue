@@ -10,7 +10,7 @@
     </div>
 
     <div>
-      <svg class="icon">
+      <svg class="icon" @click="triggerFullscreen()">
         <use xlink:href="#icon-fullscreen"></use>
       </svg>
       <svg class="icon">
@@ -57,14 +57,57 @@
 
 <script>
 
+
+function isFullscreen () {
+  return  (document.fullScreenElement && document.fullScreenElement !== null) ||
+          (document.mozFullScreen || document.webkitIsFullScreen);
+}
+
+function enterFullscreen () {
+  var docElm = document.documentElement;
+  
+  if (docElm.requestFullscreen) {
+    docElm.requestFullscreen();
+  }
+  else if (docElm.mozRequestFullScreen) {
+    docElm.mozRequestFullScreen();
+  }
+  else if (docElm.webkitRequestFullScreen) {
+    docElm.webkitRequestFullScreen();
+  }
+}
+
+function exitFullscreen () {
+  if (document.documentElement.exitFullscreen) {
+    document.documentElement.exitFullscreen();
+  }
+  else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  }
+  else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  }
+}
+
 export default {
   name: 'workspace',
   data () {
     return {
-      foo: 'bar'
     }
   },
-  methods: {}
+  methods: {
+    triggerFullscreen: function () {
+
+      if (!isFullscreen()) {
+        console.log('is NOT fullscreen, im entering')
+        enterFullscreen();
+      }
+      else {
+        console.log('is fullscreen, im exiting')
+        exitFullscreen();
+      }
+    }
+  }
 }
 </script>
 
