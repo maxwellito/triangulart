@@ -1,5 +1,5 @@
 <template>
-  <toolbar/>
+  <toolbar :playground="playground"/>
 </template>
 
 <script>
@@ -8,6 +8,7 @@ import Toolbar from './toolbar/Toolbar.vue'
 
 export default {
   name: 'workspace',
+  props: ['playground'],
   components: {
     Toolbar
   },

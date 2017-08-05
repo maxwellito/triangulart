@@ -10,13 +10,13 @@
     </div>
 
     <div>
-      <svg class="icon" @click="triggerFullscreen()">
+      <svg class="icon" @click="toggleFullscreen()">
         <use xlink:href="#icon-fullscreen"></use>
       </svg>
-      <svg class="icon">
+      <svg class="icon" @click="togglePreview()">
         <use xlink:href="#icon-preview"></use>
       </svg>
-      <svg class="icon">
+      <svg class="icon" @click="downloadSVG()">
         <use xlink:href="#icon-download"></use>
       </svg>
     </div>
@@ -58,6 +58,9 @@
 <script>
 
 
+/**
+ * Fullscreen polyfills
+ */
 function isFullscreen () {
   return  (document.fullScreenElement && document.fullScreenElement !== null) ||
           (document.mozFullScreen || document.webkitIsFullScreen);
@@ -65,7 +68,7 @@ function isFullscreen () {
 
 function enterFullscreen () {
   var docElm = document.documentElement;
-  
+
   if (docElm.requestFullscreen) {
     docElm.requestFullscreen();
   }
@@ -89,23 +92,36 @@ function exitFullscreen () {
   }
 }
 
+import Toolbar from '../../../services/toolbar.js'
+
+
+
+
 export default {
   name: 'workspace',
+  props: ['playground'],
+  created: function () {
+    this.controller = new Toolbar(this.playground);
+  },
   data () {
     return {
+      controller: null
     }
   },
   methods: {
-    triggerFullscreen: function () {
-
+    toggleFullscreen: function () {
       if (!isFullscreen()) {
-        console.log('is NOT fullscreen, im entering')
         enterFullscreen();
       }
       else {
-        console.log('is fullscreen, im exiting')
         exitFullscreen();
       }
+    },
+    togglePreview: function () {
+      this.controller.toggleOutline()
+    },
+    downloadSVG: function () {
+      this.controller.exportSVG()
     }
   }
 }

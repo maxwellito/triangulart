@@ -5,7 +5,7 @@
         @loadWorkspaceFile="loadWorkspaceFromFile" 
         @newCanvas="newWorkspace" 
         @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
-      <workspace v-if="workspace" />
+      <workspace v-if="workspace" :playground="playground"/>
     </transition>
   </div>
 </template>
@@ -13,13 +13,10 @@
 <script>
 
 import storage from './services/storage.js'
-import Toolbar from './services/toolbar.js'
 import Triangulr from './services/triangulr.js'
 
 import Launcher from './components/launcher/Launcher.vue'
 import Workspace from './components/workspace/Workspace.vue'
-
-var playground, controller;
 
 export default {
   name: 'app',
@@ -30,12 +27,9 @@ export default {
   data () {
     return {
       onPlay: false,
-      workspace: null
+      workspace: null,
+      playground: new Triangulr('playground')
     }
-  },
-  created () {
-    playground = new Triangulr('playground');
-    controller = new Toolbar(playground);
   },
   methods: {
     setView: function (view) {
@@ -43,20 +37,20 @@ export default {
     },
     loadWorkspaceFromFile: function (data) {
       console.log('loadWorkspaceFromFile', data)
-      playground.import(data)
+      this.playground.import(data)
       this.workspace = storage.createItem('imported file')
-      storage.updateItem(this.workspace.id, playground.export())
+      storage.updateItem(this.workspace.id, this.playground.export())
     },
     loadWorkspaceFromStorage: function (id) {
       console.log('loadWorkspaceFromStorage', id)
       this.workspace = {id}
-      playground.import(storage.getItem(id))
+      this.playground.import(storage.getItem(id))
     },
     newWorkspace: function (data) {
       console.log('newWorkspace', data)
-      playground.setCanvas(data.width, data.height, 30, data.isLandscape);
+      this.playground.setCanvas(data.width, data.height, 30, data.isLandscape);
       this.workspace = storage.createItem(data.name || 'untitled')
-      storage.updateItem(this.workspace.id, playground.export())
+      storage.updateItem(this.workspace.id, this.playground.export())
     }
   }
 }
