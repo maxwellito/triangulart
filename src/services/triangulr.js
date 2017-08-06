@@ -34,13 +34,25 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
   this.triangleHeight = Math.sqrt(Math.pow(triangleWidth, 2) - Math.pow(triangleWidth / 2, 2));
   this.triangleHeight = Math.round(this.triangleHeight);
 
+  this.blockWidth = (this.triangleWidth / 2)
+  this.blockRatio = this.blockWidth / this.triangleHeight
+  this.lineLength = this.mapWidth * 2 - 1
+
   this.lines = [];
   this.exportData = [];
   this.pickedColor = this.DEFAULT_COLOR;
 
+  this.isEditing = true;
+
   this.lineMapping();
   this.createTriangles();
   this.generateDom();
+
+  window.debugPlayground = this //# DEV : kill this
+}
+
+Triangulr.prototype.toggleEditing = function () {
+  this.isEditing = !this.isEditing;
 }
 
 /**
@@ -146,31 +158,102 @@ Triangulr.prototype.generateDom = function () {
   var svgTag = this.generateSVG();
 
   this.color = false;
-  svgTag.addEventListener('mousedown', function (e) {
-    this.color = this.pickedColor;
-    listener(e);
-  }.bind(this));
-  window.addEventListener('mouseup', function () {
-    this.color = false;
-  }.bind(this));
 
-  var listener = function (e) {
-    var rel = parseInt(e.target.getAttribute('rel'), 10);
-    if (this.color === false || isNaN(rel)) {
-      return;
-    }
-    this.exportData[rel].color = this.color;
-    e.target.setAttribute('fill', this.color || this.BLANK_COLOR);
-  }.bind(this);
-
-  for(var i = svgTag.childNodes.length - 1; i >= 0; i--) {
-    svgTag.childNodes[i].addEventListener('mousemove', listener);
+  var pos = null
+  
+  var mouseListener = e => {
+    moveListener(e.offsetX, e.offsetY)
   }
+
+  var touchListener = e => {
+    if (!this.isEditing) {
+      return
+    }
+    e.preventDefault();
+
+    moveListener(e.touches[0].pageX - 16, e.touches[0].pageY - 16)
+  }
+
+  var moveListener = (x, y) => {
+    let position = this.coordinator(x, y)
+
+    if (!position || position.index === pos || this.color === false) {
+      return
+    }
+    
+    pos = position.index
+    this.exportData[pos].color = this.color;
+    svgTag.childNodes[pos].setAttribute('fill', this.color || this.BLANK_COLOR);
+  }
+
+  svgTag.addEventListener('mousedown', (e) => {
+    this.color = this.pickedColor;
+    mouseListener(e)
+    svgTag.addEventListener('mousemove', mouseListener)
+  });
+
+  window.addEventListener('mouseup', () => {
+    this.color = false;
+    svgTag.removeEventListener('mousemove', mouseListener)
+  });
+
+
+
+  svgTag.addEventListener('touchstart', (e) => {
+    this.color = this.pickedColor;
+    touchListener(e)
+  });
+
+  svgTag.addEventListener('touchend', () => {
+    this.color = false;
+  });
+
+  svgTag.addEventListener('touchmove', touchListener);
+
 
   this.svgTag = svgTag;
   this.container.appendChild(svgTag);
   return svgTag;
 };
+
+
+
+Triangulr.prototype.coordinator = function (x, y) {
+    
+    if (!this.isLandscape) {
+      [x, y] = [y, x]
+    }
+
+    let line = Math.floor(y / this.triangleHeight),
+        isEvenLine = line % 2 === 0,
+        blockIndex = Math.floor(x / this.blockWidth),
+        isEvenBlock = blockIndex % 2 === 0,
+        blockX = x % this.blockWidth,
+        blockY = y % this.triangleHeight
+
+
+    if (isEvenBlock && isEvenLine || (!isEvenBlock && !isEvenLine)) {
+      if ((blockX / (this.triangleHeight - blockY)) < this.blockRatio) {
+        blockIndex--
+      }
+    }
+    else {
+      if ((blockX / blockY) < this.blockRatio) {
+        blockIndex--
+      }
+    }
+
+    if (blockIndex < 0 || blockIndex >= this.lineLength) {
+      return null
+    }
+    else {
+      return {
+        x: blockIndex,
+        y: line,
+        index: this.lineLength * line + blockIndex
+      }
+    }
+}
 
 Triangulr.prototype.generateSVG = function (isClean) {
   var i, data, points, polygon;

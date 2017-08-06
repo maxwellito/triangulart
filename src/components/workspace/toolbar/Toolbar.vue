@@ -1,22 +1,30 @@
 <template>
   <div class="toolbar">
     <div>
-      <svg class="icon">
+      <svg class="icon" @click="toggleEditing()">
         <use xlink:href="#icon-pen"></use>
       </svg>
       <svg class="icon">
+        <title>Eraser</title>
+        <desc>Eraser tool to clean triangles</desc>
         <use xlink:href="#icon-eraser"></use>
       </svg>
     </div>
 
     <div>
       <svg class="icon" @click="toggleFullscreen()">
+        <title>Fullscreen</title>
+        <desc>Toggle the fullscreen mode</desc>
         <use xlink:href="#icon-fullscreen"></use>
       </svg>
       <svg class="icon" @click="togglePreview()">
+        <title>Preview</title>
+        <desc>Show/hide the triangle grid border</desc>
         <use xlink:href="#icon-preview"></use>
       </svg>
       <svg class="icon" @click="downloadSVG()">
+        <title>Download SVG</title>
+        <desc>Downoad the SVG file of your creation</desc>
         <use xlink:href="#icon-download"></use>
       </svg>
     </div>
@@ -122,6 +130,9 @@ export default {
     },
     downloadSVG: function () {
       this.controller.exportSVG()
+    },
+    toggleEditing: function () {
+      this.controller.toggleEditing()
     }
   }
 }

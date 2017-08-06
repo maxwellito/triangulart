@@ -63,6 +63,12 @@ Toolbar.prototype.exportSVG = function () {
   this.saveFile(this.playground.exportSVG(), 'artwork.svg');
 };
 
+Toolbar.prototype.toggleEditing = function () {
+  this.playground.toggleEditing();
+};
+
+
+
 /**
  * From http://jsfiddle.net/koldev/cw7w5/
  * >> +1 Good Job!
