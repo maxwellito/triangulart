@@ -20,7 +20,6 @@
       </label>
       
       <span class="toolbar-item palette">
-        <!-- <svg @click="addColor()" class="toolbar-item icon"><use xlink:href="#action-add"></use></svg> -->
         <span @click="addColor()" class="palette-color">+</span>
         <span v-for="color in palette"
               :key="color"
@@ -62,43 +61,8 @@
 
 <script>
 
-
-/**
- * Fullscreen polyfills
- */
-function isFullscreen () {
-  return  (document.fullScreenElement && document.fullScreenElement !== null) ||
-          (document.mozFullScreen || document.webkitIsFullScreen);
-}
-
-function enterFullscreen () {
-  var docElm = document.documentElement;
-
-  if (docElm.requestFullscreen) {
-    docElm.requestFullscreen();
-  }
-  else if (docElm.mozRequestFullScreen) {
-    docElm.mozRequestFullScreen();
-  }
-  else if (docElm.webkitRequestFullScreen) {
-    docElm.webkitRequestFullScreen();
-  }
-}
-
-function exitFullscreen () {
-  if (document.documentElement.exitFullscreen) {
-    document.documentElement.exitFullscreen();
-  }
-  else if (document.mozCancelFullScreen) {
-    document.mozCancelFullScreen();
-  }
-  else if (document.webkitExitFullscreen) {
-    document.webkitExitFullscreen();
-  }
-}
-
 import Toolbar from '../../../services/toolbar.js'
-
+import fullscreenHelper from '../../../services/fullscreenHelper.js'
 
 const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink'
 
@@ -119,12 +83,7 @@ export default {
   },
   methods: {
     toggleFullscreen: function () {
-      if (!isFullscreen()) {
-        enterFullscreen();
-      }
-      else {
-        exitFullscreen();
-      }
+      fullscreenHelper.toggle()
     },
     togglePreview: function () {
       this.controller.toggleOutline()
@@ -205,7 +164,6 @@ export default {
   vertical-align: super;
   border-radius: 50%;
 }
-
 
 .palette {
   @include horizontal-toolbar;
