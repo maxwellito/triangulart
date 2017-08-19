@@ -1,7 +1,5 @@
 function Toolbar (playground) {
   this.playground = playground;
-  this.colorInput = document.getElementById('color-picker');
-  this.colorList  = document.getElementById('color-list');
   this.outlineStyle = document.getElementById('outline-style');
   this.isOutlineOn = true;
   this.palette = [];
@@ -42,11 +40,8 @@ Toolbar.prototype.loadConfig = function (e) {
 
 Toolbar.prototype.setConfig = function (config) {
   // Set colors
-  this.palette.innerHTML = '';
-  config.palette.forEach(function (color) {
-    this.addColor(color);
-  }.bind(this));
-
+  this.palette = [];
+  config.palette.forEach(this.addColor(color).bind(this));
   this.playground.import(config.playground);
 };
 
@@ -64,7 +59,7 @@ Toolbar.prototype.exportSVG = function () {
 };
 
 Toolbar.prototype.toggleEditing = function () {
-  this.playground.toggleEditing();
+  return this.playground.toggleEditing();
 };
 
 
@@ -90,24 +85,18 @@ Toolbar.prototype.colorButtonListener = function (e) {
   this.playground.pickedColor = e.target.getAttribute('rel');
 };
 
-Toolbar.prototype.updateCurrentColor = function (e) {
-  this.playground.pickedColor = this.colorInput.value;
+Toolbar.prototype.updateCurrentColor = function (color) {
+  this.playground.pickedColor = color;
 };
 
-Toolbar.prototype.eraseMode = function (e) {
+Toolbar.prototype.eraseMode = function () {
   this.playground.pickedColor = null;
 };
 
 Toolbar.prototype.addColor = function (color) {
-  color = color || this.colorInput.value;
-  if (this.palette.indexOf(color) !== -1) {
+  if (!color || this.palette.indexOf(color) !== -1) {
     return;
   }
-  var newColor = document.createElement('button');
-  newColor.style.backgroundColor = color;
-  newColor.setAttribute('rel', color);
-  newColor.onclick = this.colorButtonListener.bind(this);
-  this.colorList.appendChild(newColor);
   this.palette.push(color);
 };
 

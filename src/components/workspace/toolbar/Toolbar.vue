@@ -1,65 +1,62 @@
 <template>
   <div class="toolbar">
-    <div>
-      <svg class="icon" @click="toggleEditing()">
-        <use xlink:href="#icon-pen"></use>
+    <div class="toolbar-left">
+      <svg class="toolbar-item icon" @click="toggleEditing()">
+        <use v-bind:href="'#icon-' + editingIcon"></use>
       </svg>
-      <svg class="icon">
+      <svg class="toolbar-item icon" @click="selectEraser()">
         <title>Eraser</title>
         <desc>Eraser tool to clean triangles</desc>
         <use xlink:href="#icon-eraser"></use>
       </svg>
+      <label class="toolbar-item">
+        <input type="color" class="color-picker" @change="updateCurrentColor()" v-model="selectedColor"/>
+        <svg class="icon">
+          <title>Color picker</title>
+          <desc>Pick a new color to use to draw</desc>
+          <use xlink:href="#icon-picker"></use>
+        </svg>
+        <span :style="{background: selectedColor}" class="color-value"></span>
+      </label>
+      
+      <span class="toolbar-item palette">
+        <!-- <svg @click="addColor()" class="toolbar-item icon"><use xlink:href="#action-add"></use></svg> -->
+        <span @click="addColor()" class="palette-color">+</span>
+        <span v-for="color in palette"
+              :key="color"
+              :style="{'background-color':color}"
+              class="palette-color"
+              :class="{'active': color === selectedColor}"
+              @click="updateCurrentColor(color)"></span>
+      </span>
+
+      <!-- <div class="colorlist" id="color-list"></div> -->
     </div>
 
-    <div>
-      <svg class="icon" @click="toggleFullscreen()">
+    <div class="toolbar-right">
+      <svg class="toolbar-item icon" @click="toggleFullscreen()">
         <title>Fullscreen</title>
         <desc>Toggle the fullscreen mode</desc>
         <use xlink:href="#icon-fullscreen"></use>
       </svg>
-      <svg class="icon" @click="togglePreview()">
+      <svg class="toolbar-item icon" @click="togglePreview()">
         <title>Preview</title>
         <desc>Show/hide the triangle grid border</desc>
         <use xlink:href="#icon-preview"></use>
       </svg>
-      <svg class="icon" @click="downloadSVG()">
+      <svg class="toolbar-item icon" @click="downloadSVG()">
         <title>Download SVG</title>
         <desc>Downoad the SVG file of your creation</desc>
         <use xlink:href="#icon-download"></use>
       </svg>
-    </div>
-    <!--
-    <div class="leftbar">
-      <div class="button-group">
-        <button type="button" onclick="controller.eraseMode();">
-          <svg class="icon">
-            <use xlink:href="#icon-eraser"></use>
-          </svg>
-        </button>
-      </div>
-      <div class="button-group">
-        <input type="color" id="color-picker" class="color-picker" onchange="controller.updateCurrentColor();" onclick="controller.updateCurrentColor();"/><button type="button" onclick="controller.addColor();">+</button>
-      </div>
-      <div class="colorlist" id="color-list"></div>
-    </div>
-
-    <div class="rightbar">
-      <div class="button-group">
-        <button type="button" onclick="controller.toggleOutline();">outline</button>
-      </div>
-      <div class="button-group">
-        <button type="button" onclick="controller.load();">load</button><button type="button" onclick="controller.save();">save</button>
-      </div>
-      <div class="button-group">
-        <button type="button" onclick="controller.exportSVG();">export (SVG)</button>
-      </div>
-      <a href="https://github.com/maxwellito/triangulart">
+      <!--
+      <a class="toolbar-item" href="https://github.com/maxwellito/triangulart">
         <svg class="icon">
           <use xlink:href="#icon-github"></use>
         </svg>
       </a>
+      -->
     </div>
-    -->
   </div>
 </template>
 
@@ -103,17 +100,21 @@ function exitFullscreen () {
 import Toolbar from '../../../services/toolbar.js'
 
 
-
+const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink'
 
 export default {
   name: 'workspace',
   props: ['playground'],
   created: function () {
     this.controller = new Toolbar(this.playground);
+    this.palette = this.controller.palette
   },
   data () {
     return {
-      controller: null
+      controller: null,
+      selectedColor: '#11aaff',
+      editingIcon: 'pen',
+      palette: []
     }
   },
   methods: {
@@ -131,17 +132,35 @@ export default {
     downloadSVG: function () {
       this.controller.exportSVG()
     },
-    toggleEditing: function () {
-      this.controller.toggleEditing()
+    toggleEditing: function (newState) {
+      this.editingIcon = this.controller.toggleEditing() ? 'pen' : 'hand'
+    },
+    selectEraser: function () {
+      this.controller.eraseMode()
+    },
+    addColor: function () {
+      console.log('Color added', this.selectedColor)
+      this.controller.addColor(this.selectedColor)
+    },
+    updateCurrentColor: function (color) {
+      console.log('Update color', (color || this.selectedColor))
+      this.selectedColor = color || this.selectedColor
+      this.controller.updateCurrentColor(this.selectedColor)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.toolbar {
-  position: fixed;
+
+@mixin horizontal-toolbar {
   display: flex;
+  align-items: center;
+}
+
+.toolbar {
+  @include horizontal-toolbar;
+  position: fixed;
   flex-direction: row;
   justify-content: space-between;
   bottom: 0;
@@ -157,8 +176,62 @@ export default {
   }
 }
 
-.icon + .icon {
-  margin-left: .5rem;
+.toolbar-left, .toolbar-right {
+  @include horizontal-toolbar;
+}
+
+.toolbar-item {
+  height: 2rem;
+  & + & {
+    margin-left: .5rem;
+  }
+}
+
+.active {
+  color: #1af;
+}
+
+.color-picker {
+  position: relative;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.color-value {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: super;
+  border-radius: 50%;
+}
+
+
+.palette {
+  @include horizontal-toolbar;
+  padding: .25rem;
+  border: 1px solid #fff;
+  border-radius: 1rem;
+  box-sizing: border-box;
+}
+
+.palette-color {
+  display: inline-block;
+  width: 1.375em;
+  height: 1.375em;
+  border-radius: 50%;
+  box-sizing: border-box;
+  text-align: center;
+  line-height: 1.3;
+  cursor: pointer;
+
+  &.active {
+    border: .2em double #fff; 
+  }
+
+  & + &  {
+    margin-left: .25rem;
+  }
 }
 
 </style>

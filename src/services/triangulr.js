@@ -52,7 +52,8 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
 }
 
 Triangulr.prototype.toggleEditing = function () {
-  this.isEditing = !this.isEditing;
+  this.isEditing = !this.isEditing
+  return this.isEditing
 }
 
 /**
