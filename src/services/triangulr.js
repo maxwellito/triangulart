@@ -291,6 +291,19 @@ Triangulr.prototype.generateSVG = function (isClean) {
   return svgTag;
 }
 
+/**
+ * togglePreview
+ * toggle the class preview to the SVG
+ * To show/hide the strokes
+ *
+ */
+Triangulr.prototype.togglePreview = function () {
+  if (!this.svgTag) {
+    return
+  }
+  this.svgTag.classList.toggle('preview')
+};
+
 Triangulr.prototype.export = function () {
   return {
     isLandscape: this.isLandscape,

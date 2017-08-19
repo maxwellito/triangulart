@@ -100,14 +100,4 @@ Toolbar.prototype.addColor = function (color) {
   this.palette.push(color);
 };
 
-Toolbar.prototype.toggleOutline = function () {
-  if (this.isOutlineOn) {
-    this.outlineStyle.textContent = '.playground path {stroke: none;}';
-  }
-  else {
-    this.outlineStyle.textContent = '.playground path {stroke: currentColor;}';
-  }
-  this.isOutlineOn = !this.isOutlineOn;
-}
-
 export default Toolbar

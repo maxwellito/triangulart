@@ -38,7 +38,7 @@
         <desc>Toggle the fullscreen mode</desc>
         <use xlink:href="#icon-fullscreen"></use>
       </svg>
-      <svg class="toolbar-item icon" @click="togglePreview()">
+        <svg class="toolbar-item icon" @click="togglePreview()">
         <title>Preview</title>
         <desc>Show/hide the triangle grid border</desc>
         <use xlink:href="#icon-preview"></use>
@@ -67,7 +67,7 @@ import fullscreenHelper from '../../../services/fullscreenHelper.js'
 const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink'
 
 export default {
-  name: 'workspace',
+  name: 'toolbar',
   props: ['playground'],
   created: function () {
     this.controller = new Toolbar(this.playground);
@@ -82,11 +82,11 @@ export default {
     }
   },
   methods: {
+    togglePreview: function () {
+      this.playground.togglePreview()
+    },
     toggleFullscreen: function () {
       fullscreenHelper.toggle()
-    },
-    togglePreview: function () {
-      this.controller.toggleOutline()
     },
     downloadSVG: function () {
       this.controller.exportSVG()
