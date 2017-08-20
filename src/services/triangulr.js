@@ -43,6 +43,7 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
   this.pickedColor = this.DEFAULT_COLOR;
 
   this.isEditing = true;
+  this.palette = [];
 
   this.lineMapping();
   this.createTriangles();
@@ -334,6 +335,23 @@ Triangulr.prototype.import = function (data) {
 
 Triangulr.prototype.exportSVG = function () {
   return this.generateSVG(true).outerHTML;
+};
+
+
+Triangulr.prototype.updateCurrentColor = function (color) {
+  this.pickedColor = color;
+};
+
+Triangulr.prototype.eraseMode = function () {
+  this.pickedColor = null;
+};
+
+
+Triangulr.prototype.addColor = function (color) {
+  if (!color || this.palette.indexOf(color) !== -1) {
+    return;
+  }
+  this.palette.push(color);
 };
 
 export default Triangulr

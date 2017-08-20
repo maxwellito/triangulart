@@ -18,13 +18,12 @@
         </svg>
         <span :style="{background: selectedColor}" class="color-value"></span>
       </label>
-      
       <span class="toolbar-item palette">
         <span @click="addColor()" class="palette-color">+</span>
         <span v-for="color in palette"
+              class="palette-color"
               :key="color"
               :style="{'background-color':color}"
-              class="palette-color"
               :class="{'active': color === selectedColor}"
               @click="updateCurrentColor(color)"></span>
       </span>
@@ -61,7 +60,7 @@
 
 <script>
 
-import Toolbar from '../../../services/toolbar.js'
+import downloader from '../../../services/downloader.js'
 import fullscreenHelper from '../../../services/fullscreenHelper.js'
 
 const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink'
@@ -70,12 +69,10 @@ export default {
   name: 'toolbar',
   props: ['playground'],
   created: function () {
-    this.controller = new Toolbar(this.playground);
-    this.palette = this.controller.palette
+    this.palette = this.playground.palette
   },
   data () {
     return {
-      controller: null,
       selectedColor: '#11aaff',
       editingIcon: 'pen',
       palette: []
@@ -89,22 +86,22 @@ export default {
       fullscreenHelper.toggle()
     },
     downloadSVG: function () {
-      this.controller.exportSVG()
+      downloader(this.playground.exportSVG(), 'artwork.svg');
     },
     toggleEditing: function (newState) {
-      this.editingIcon = this.controller.toggleEditing() ? 'pen' : 'hand'
+      this.editingIcon = this.playground.toggleEditing() ? 'pen' : 'hand'
     },
     selectEraser: function () {
-      this.controller.eraseMode()
+      this.playground.eraseMode()
     },
     addColor: function () {
       console.log('Color added', this.selectedColor)
-      this.controller.addColor(this.selectedColor)
+      this.playground.addColor(this.selectedColor)
     },
     updateCurrentColor: function (color) {
       console.log('Update color', (color || this.selectedColor))
       this.selectedColor = color || this.selectedColor
-      this.controller.updateCurrentColor(this.selectedColor)
+      this.playground.updateCurrentColor(this.selectedColor)
     }
   }
 }
