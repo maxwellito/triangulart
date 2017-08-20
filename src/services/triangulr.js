@@ -17,6 +17,7 @@ function Triangulr (containerId) {
 
 Triangulr.prototype.DEFAULT_COLOR = '#000';
 Triangulr.prototype.BLANK_COLOR = '#FFF';
+Triangulr.prototype.AUTOSAVE_TIMER = 5000;
 
 /**
  * Triangulr class
@@ -193,6 +194,7 @@ Triangulr.prototype.generateDom = function () {
   window.addEventListener('mouseup', () => {
     this.color = false;
     svgTag.removeEventListener('mousemove', mouseListener)
+    this.saveTimeout()
   });
 
   svgTag.addEventListener('touchstart', (e) => {
@@ -202,6 +204,7 @@ Triangulr.prototype.generateDom = function () {
 
   svgTag.addEventListener('touchend', () => {
     this.color = false;
+    this.saveTimeout()
   });
 
   svgTag.addEventListener('touchmove', touchListener);
@@ -372,11 +375,19 @@ Triangulr.prototype.newWorkspace = function (data) {
 }
 
 Triangulr.prototype.save = function () {
+  console.log('SAVIN')
   storage.updateItem(this.workspace.id, this.export())
 }
 
 
-
+Triangulr.prototype.saveTimeout = function  () {
+  if (this.saveTimer) {
+    console.log('clear timer')
+    clearTimeout(this.saveTimer)
+  }
+  console.log('timer set')
+  this.saveTimer = setTimeout(() => this.save(), this.AUTOSAVE_TIMER)
+}
 
 /* Controls
  */
