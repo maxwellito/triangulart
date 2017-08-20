@@ -1,5 +1,7 @@
 'use strict';
 
+import storage from './storage.js'
+
 /**
  * Triangulr class
  * instructions will follow, in an other commit, it's late now
@@ -50,11 +52,6 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
   this.generateDom();
 
   window.debugPlayground = this //# DEV : kill this
-}
-
-Triangulr.prototype.toggleEditing = function () {
-  this.isEditing = !this.isEditing
-  return this.isEditing
 }
 
 /**
@@ -157,11 +154,10 @@ Triangulr.prototype.generateDom = function () {
     this.svgTag.remove();
   }
 
-  var svgTag = this.generateSVG();
-
-  this.color = false;
-
-  var pos = null
+  let svgTag = this.generateSVG(),
+      pos = null
+  
+  this.color = false
   
   var mouseListener = e => {
     moveListener(e.offsetX, e.offsetY)
@@ -199,8 +195,6 @@ Triangulr.prototype.generateDom = function () {
     svgTag.removeEventListener('mousemove', mouseListener)
   });
 
-
-
   svgTag.addEventListener('touchstart', (e) => {
     this.color = this.pickedColor;
     touchListener(e)
@@ -212,14 +206,29 @@ Triangulr.prototype.generateDom = function () {
 
   svgTag.addEventListener('touchmove', touchListener);
 
-
   this.svgTag = svgTag;
   this.container.appendChild(svgTag);
   return svgTag;
 };
 
-
-
+/**
+ * Return the info about a triangle available
+ * at a specific position.
+ * 
+ * If a triangle  coordinate are avalable, the method will
+ * return a following object
+ * {
+ *   x: (int) column index,
+ *   y: (int) line index,
+ *   index: (int) triangle index
+ * }
+ * 
+ * Or null if no triangle is at these coordinates
+ * 
+ * @param int x X position in pixels
+ * @param int y Y position in pixels
+ * @return object Triangle informations
+ */
 Triangulr.prototype.coordinator = function (x, y) {
     
     if (!this.isLandscape) {
@@ -257,6 +266,15 @@ Triangulr.prototype.coordinator = function (x, y) {
     }
 }
 
+/**
+ * Generate the SVG map from the information
+ * of the instance. An optional boolean is available
+ * to generate a clean SVG to produce a lightweight
+ * SVG (used for export)
+ * 
+ * @param boolean isClean To produce a clean SVG
+ * @return SVGDOMElement The artwork
+ */
 Triangulr.prototype.generateSVG = function (isClean) {
   var i, data, points, polygon;
   var svgTag = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -292,6 +310,77 @@ Triangulr.prototype.generateSVG = function (isClean) {
   return svgTag;
 }
 
+
+
+Triangulr.prototype.exportSVG = function () {
+  return this.generateSVG(true).outerHTML;
+};
+
+Triangulr.prototype.export = function () {
+  return {
+    isLandscape: this.isLandscape,
+    mapWidth: this.mapWidth,
+    mapHeight: this.mapHeight,
+    mapData: this.exportData.map(function (e) {return e.color || null}),
+    triangleWidth: this.triangleWidth,
+    palette: this.palette
+  };
+};
+
+
+Triangulr.prototype.import = function (data) {
+  this.setCanvas(
+    data.mapWidth,
+    data.mapHeight,
+    data.triangleWidth,
+    data.isLandscape
+  );
+
+  this.palette = data.palette || []
+
+  for (var i in data.mapData) {
+    this.exportData[i].color = data.mapData[i];
+  }
+
+  for (var i = 0; i < this.svgTag.childNodes.length; i++) {
+    this.svgTag.childNodes[i].setAttribute('fill', this.exportData[i].color || this.BLANK_COLOR);
+  }
+};
+
+
+
+
+Triangulr.prototype.loadWorkspaceFromFile = function (data) {
+  console.log('loadWorkspaceFromFile', data)
+  this.import(data)
+  this.workspace = storage.createItem('imported file')
+  storage.updateItem(this.workspace.id, this.export())
+  return true
+}
+Triangulr.prototype.loadWorkspaceFromStorage = function (id) {
+  console.log('loadWorkspaceFromStorage', id)
+  this.workspace = {id}
+  this.import(storage.getItem(id))
+  return true
+}
+Triangulr.prototype.newWorkspace = function (data) {
+  console.log('newWorkspace', data)
+  this.setCanvas(data.width, data.height, 30, data.isLandscape);
+  this.workspace = storage.createItem(data.name || 'untitled')
+  storage.updateItem(this.workspace.id, this.export())
+  return true
+}
+
+Triangulr.prototype.save = function () {
+  storage.updateItem(this.workspace.id, this.export())
+}
+
+
+
+
+/* Controls
+ */
+
 /**
  * togglePreview
  * toggle the class preview to the SVG
@@ -305,38 +394,6 @@ Triangulr.prototype.togglePreview = function () {
   this.svgTag.classList.toggle('preview')
 };
 
-Triangulr.prototype.export = function () {
-  return {
-    isLandscape: this.isLandscape,
-    mapWidth: this.mapWidth,
-    mapHeight: this.mapHeight,
-    mapData: this.exportData.map(function (e) {return e.color || null}),
-    triangleWidth: this.triangleWidth
-  };
-};
-
-
-Triangulr.prototype.import = function (data) {
-  this.setCanvas(
-    data.mapWidth,
-    data.mapHeight,
-    data.triangleWidth,
-    data.isLandscape
-  );
-
-  for (var i in data.mapData) {
-    this.exportData[i].color = data.mapData[i];
-  }
-
-  for (var i = 0; i < this.svgTag.childNodes.length; i++) {
-    this.svgTag.childNodes[i].setAttribute('fill', this.exportData[i].color || this.BLANK_COLOR);
-  }
-};
-
-Triangulr.prototype.exportSVG = function () {
-  return this.generateSVG(true).outerHTML;
-};
-
 
 Triangulr.prototype.updateCurrentColor = function (color) {
   this.pickedColor = color;
@@ -346,6 +403,10 @@ Triangulr.prototype.eraseMode = function () {
   this.pickedColor = null;
 };
 
+Triangulr.prototype.toggleEditing = function () {
+  this.isEditing = !this.isEditing
+  return this.isEditing
+}
 
 Triangulr.prototype.addColor = function (color) {
   if (!color || this.palette.indexOf(color) !== -1) {

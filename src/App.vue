@@ -1,11 +1,11 @@
 <template>
   <div>
     <transition name="fade">
-      <launcher v-if="!workspace" 
+      <launcher v-if="!onPlay" 
         @loadWorkspaceFile="loadWorkspaceFromFile" 
         @newCanvas="newWorkspace" 
         @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
-      <workspace v-if="workspace" :playground="playground"/>
+      <workspace v-if="onPlay" :playground="playground"/>
     </transition>
   </div>
 </template>
@@ -32,25 +32,14 @@ export default {
     }
   },
   methods: {
-    setView: function (view) {
-      this.view = view
-    },
     loadWorkspaceFromFile: function (data) {
-      console.log('loadWorkspaceFromFile', data)
-      this.playground.import(data)
-      this.workspace = storage.createItem('imported file')
-      storage.updateItem(this.workspace.id, this.playground.export())
+      this.onPlay = this.playground.loadWorkspaceFromFile(data)
     },
     loadWorkspaceFromStorage: function (id) {
-      console.log('loadWorkspaceFromStorage', id)
-      this.workspace = {id}
-      this.playground.import(storage.getItem(id))
+      this.onPlay = this.playground.loadWorkspaceFromStorage(id)
     },
     newWorkspace: function (data) {
-      console.log('newWorkspace', data)
-      this.playground.setCanvas(data.width, data.height, 30, data.isLandscape);
-      this.workspace = storage.createItem(data.name || 'untitled')
-      storage.updateItem(this.workspace.id, this.playground.export())
+      this.onPlay = this.playground.newWorkspace(data)
     }
   }
 }
