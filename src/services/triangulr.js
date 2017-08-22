@@ -1,6 +1,7 @@
 'use strict';
 
 import storage from './storage.js'
+import BackStack from './backStack.js'
 
 /**
  * Triangulr class
@@ -51,6 +52,7 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
   this.pickedColor = this.DEFAULT_COLOR;
 
   this.palette = [];
+  this.backStack = new BackStack();
 
   this.lineMapping();
   this.createTriangles();
@@ -184,11 +186,13 @@ Triangulr.prototype.generateDom = function () {
 
     switch (this.action) {
     case this.ACTION_FILL:
+      this.backStack.actionStack(pos, this.exportData[pos].color)
       this.exportData[pos].color = this.color
       svgTag.childNodes[pos].setAttribute('fill', this.color || this.BLANK_COLOR)
       break
     
     case this.ACTION_ERASE:
+      this.backStack.actionStack(pos, this.exportData[pos].color)
       this.exportData[pos].color = null
       svgTag.childNodes[pos].setAttribute('fill', 'none')
       break
@@ -202,20 +206,24 @@ Triangulr.prototype.generateDom = function () {
   }
 
   svgTag.addEventListener('mousedown', (e) => {
+    this.backStack.startAction()
     mouseListener(e)
     svgTag.addEventListener('mousemove', mouseListener)
   });
 
   window.addEventListener('mouseup', () => {
+    this.backStack.endAction()
     svgTag.removeEventListener('mousemove', mouseListener)
     this.saveTimeout()
   });
 
   svgTag.addEventListener('touchstart', (e) => {
+    this.backStack.startAction()
     touchListener(e)
   });
 
   svgTag.addEventListener('touchend', () => {
+    this.backStack.endAction()
     this.saveTimeout()
   });
 
@@ -450,5 +458,15 @@ Triangulr.prototype.addColor = function (color) {
   }
   this.palette.push(color);
 };
+
+
+Triangulr.prototype.undo = function () {
+  let fill, backAction = this.backStack.popLastAction()
+  for (let fillIndex in backAction) {
+    fill = backAction[fillIndex]
+    this.exportData[fill[0]].color = fill[1]
+    this.svgTag.childNodes[fill[0]].setAttribute('fill', fill[1] || 'none')
+  }
+}
 
 export default Triangulr

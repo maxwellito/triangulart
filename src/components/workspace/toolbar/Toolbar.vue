@@ -47,6 +47,11 @@
     </div>
 
     <div class="horizontal-toolbar">
+      <svg class="toolbar-item icon" @click="undo()">
+        <title>Undo</title>
+        <desc>Undo the last action done on the workspace</desc>
+        <use xlink:href="#icon-undo"></use>
+      </svg>
       <svg class="toolbar-item icon" @click="toggleFullscreen()">
         <title>Fullscreen</title>
         <desc>Toggle the fullscreen mode</desc>
@@ -117,6 +122,9 @@ export default {
     },
 
     // 
+    undo: function () {
+      this.playground.undo()
+    },
     togglePreview: function () {
       this.playground.togglePreview()
     },
