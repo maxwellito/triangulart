@@ -19,6 +19,11 @@ Triangulr.prototype.DEFAULT_COLOR = '#000';
 Triangulr.prototype.BLANK_COLOR = '#FFF';
 Triangulr.prototype.AUTOSAVE_TIMER = 5000;
 
+Triangulr.prototype.ACTION_FILL = 1
+Triangulr.prototype.ACTION_ERASE = 2
+Triangulr.prototype.ACTION_MOVE = 3
+Triangulr.prototype.ACTION_SELECT = 4
+
 /**
  * Triangulr class
  * instructions will follow, in an other commit, it's late now
@@ -45,7 +50,6 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
   this.exportData = [];
   this.pickedColor = this.DEFAULT_COLOR;
 
-  this.isEditing = true;
   this.palette = [];
 
   this.lineMapping();
@@ -158,16 +162,14 @@ Triangulr.prototype.generateDom = function () {
   let svgTag = this.generateSVG(),
       pos = null
   
-  this.color = false
-  
   var mouseListener = e => {
     moveListener(e.offsetX, e.offsetY)
   }
 
   var touchListener = e => {
-    if (!this.isEditing) {
-      return
-    }
+    // if (!this.isEditing) { //# USE THE ACTION PROPERTY NOW
+    //   return
+    // }
     e.preventDefault();
 
     moveListener(e.touches[0].pageX - 16, e.touches[0].pageY - 16)
@@ -175,35 +177,45 @@ Triangulr.prototype.generateDom = function () {
 
   var moveListener = (x, y) => {
     let position = this.coordinator(x, y)
-
-    if (!position || position.index === pos || this.color === false) {
+    if (!position || position.index === pos) {
       return
     }
-    
     pos = position.index
-    this.exportData[pos].color = this.color;
-    svgTag.childNodes[pos].setAttribute('fill', this.color || this.BLANK_COLOR);
+
+    switch (this.action) {
+    case this.ACTION_FILL:
+      this.exportData[pos].color = this.color
+      svgTag.childNodes[pos].setAttribute('fill', this.color || this.BLANK_COLOR)
+      break
+    
+    case this.ACTION_ERASE:
+      this.exportData[pos].color = null
+      svgTag.childNodes[pos].setAttribute('fill', 'none')
+      break
+    
+    case this.ACTION_MOVE:
+      break
+    }
+    
+    
+    
   }
 
   svgTag.addEventListener('mousedown', (e) => {
-    this.color = this.pickedColor;
     mouseListener(e)
     svgTag.addEventListener('mousemove', mouseListener)
   });
 
   window.addEventListener('mouseup', () => {
-    this.color = false;
     svgTag.removeEventListener('mousemove', mouseListener)
     this.saveTimeout()
   });
 
   svgTag.addEventListener('touchstart', (e) => {
-    this.color = this.pickedColor;
     touchListener(e)
   });
 
   svgTag.addEventListener('touchend', () => {
-    this.color = false;
     this.saveTimeout()
   });
 
@@ -313,8 +325,6 @@ Triangulr.prototype.generateSVG = function (isClean) {
   return svgTag;
 }
 
-
-
 Triangulr.prototype.exportSVG = function () {
   return this.generateSVG(true).outerHTML;
 };
@@ -329,7 +339,6 @@ Triangulr.prototype.export = function () {
     palette: this.palette
   };
 };
-
 
 Triangulr.prototype.import = function (data) {
   this.setCanvas(
@@ -381,6 +390,7 @@ Triangulr.prototype.save = function () {
 
 
 Triangulr.prototype.saveTimeout = function  () {
+  //# DO NOT FORGET TO CLEAR THIS WHEN LEAVING THE WORKSPACE
   if (this.saveTimer) {
     console.log('clear timer')
     clearTimeout(this.saveTimer)
@@ -406,18 +416,33 @@ Triangulr.prototype.togglePreview = function () {
 };
 
 
-Triangulr.prototype.updateCurrentColor = function (color) {
-  this.pickedColor = color;
-};
-
-Triangulr.prototype.eraseMode = function () {
-  this.pickedColor = null;
-};
-
-Triangulr.prototype.toggleEditing = function () {
-  this.isEditing = !this.isEditing
-  return this.isEditing
+/**
+ * Set a new mode to the editor between the following
+ * actions:
+ * 
+ * ACTION_FILL
+ * ACTION_ERASE
+ * ACTION_MOVE
+ * ACTION_SELECT
+ * 
+ * Some action require options:
+ * ACTION_FILL needs an option object : {color: '#11aaff'}
+ * 
+ * @param action  number Action index (from triangulr consts)
+ * @param options object Extra options when required
+ */
+Triangulr.prototype.setMode = function (action) {
+  this.action = action
 }
+
+Triangulr.prototype.isOnMode = function (action) {
+  return this.action === action
+}
+
+Triangulr.prototype.setColor = function (color) {
+  this.color = color;
+}
+
 
 Triangulr.prototype.addColor = function (color) {
   if (!color || this.palette.indexOf(color) !== -1) {

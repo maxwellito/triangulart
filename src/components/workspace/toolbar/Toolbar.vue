@@ -1,16 +1,31 @@
 <template>
   <div class="toolbar">
-    <div class="toolbar-left">
-      <svg class="toolbar-item icon" @click="toggleEditing()">
-        <use v-bind:href="'#icon-' + editingIcon"></use>
+    <div class="horizontal-toolbar">
+      <svg class="toolbar-item icon" @click="setMode('MOVE')" :class="{active: currentMode == 'MOVE'}">
+        <title>Move</title>
+        <desc>Scroll on the map without editing</desc>
+        <use href="#icon-hand"></use>
       </svg>
-      <svg class="toolbar-item icon" @click="selectEraser()">
+      <svg class="toolbar-item icon" @click="setMode('SELECT')" :class="{active: currentMode == 'SELECT'}">
+        <title>Select</title>
+        <desc>Select an area of triangles to edit them</desc>
+        <use href="#icon-selection"></use>
+      </svg>
+      <svg class="toolbar-item icon" @click="setMode('FILL')" :class="{active: currentMode == 'FILL'}">
+        <title>Pen</title>
+        <desc>Fill triangles</desc>
+        <use href="#icon-pen"></use>
+      </svg>
+      <svg class="toolbar-item icon" @click="setMode('ERASE')" :class="{active: currentMode == 'ERASE'}">
         <title>Eraser</title>
         <desc>Eraser tool to clean triangles</desc>
         <use xlink:href="#icon-eraser"></use>
       </svg>
+    </div>
+
+    <div class="horizontal-toolbar">
       <label class="toolbar-item">
-        <input type="color" class="color-picker" @change="updateCurrentColor()" v-model="selectedColor"/>
+        <input type="color" class="color-picker" @change="setFillColor()" v-model="selectedColor"/>
         <svg class="icon">
           <title>Color picker</title>
           <desc>Pick a new color to use to draw</desc>
@@ -25,13 +40,13 @@
               :key="color"
               :style="{'background-color':color}"
               :class="{'active': color === selectedColor}"
-              @click="updateCurrentColor(color)"></span>
+              @click="setFillColor(color)"></span>
       </span>
 
       <!-- <div class="colorlist" id="color-list"></div> -->
     </div>
 
-    <div class="toolbar-right">
+    <div class="horizontal-toolbar">
       <svg class="toolbar-item icon" @click="toggleFullscreen()">
         <title>Fullscreen</title>
         <desc>Toggle the fullscreen mode</desc>
@@ -70,15 +85,38 @@ export default {
   props: ['playground'],
   created: function () {
     this.palette = this.playground.palette
+    this.setFillColor()
+    this.setMode('FILL')
   },
   data () {
     return {
       selectedColor: '#11aaff',
-      editingIcon: 'pen',
+      currentMode: 'FILL',
       palette: []
     }
   },
   methods: {
+    // Actions
+    setMode: function (action) {
+      console.log('=='+action,this.playground['ACTION_' + action])
+      this.playground.setMode(this.playground['ACTION_' + action])
+      this.currentMode = action
+    },
+    isOnMode: function (action) {
+      console.log('::'+action,this.playground['ACTION_' + action], this.playground.isOnMode(this.playground['ACTION_' + action]))
+      return this.playground.isOnMode(this.playground['ACTION_' + action])
+    },
+
+
+    addColor: function () {
+      this.playground.addColor(this.selectedColor)
+    },
+    setFillColor: function (color) {
+      this.selectedColor = color || this.selectedColor
+      this.playground.setColor(this.selectedColor)
+    },
+
+    // 
     togglePreview: function () {
       this.playground.togglePreview()
     },
@@ -87,21 +125,6 @@ export default {
     },
     downloadSVG: function () {
       downloader(this.playground.exportSVG(), 'artwork.svg');
-    },
-    toggleEditing: function (newState) {
-      this.editingIcon = this.playground.toggleEditing() ? 'pen' : 'hand'
-    },
-    selectEraser: function () {
-      this.playground.eraseMode()
-    },
-    addColor: function () {
-      console.log('Color added', this.selectedColor)
-      this.playground.addColor(this.selectedColor)
-    },
-    updateCurrentColor: function (color) {
-      console.log('Update color', (color || this.selectedColor))
-      this.selectedColor = color || this.selectedColor
-      this.playground.updateCurrentColor(this.selectedColor)
     }
   }
 }
@@ -109,13 +132,13 @@ export default {
 
 <style lang="scss">
 
-@mixin horizontal-toolbar {
+.horizontal-toolbar {
   display: flex;
   align-items: center;
 }
 
 .toolbar {
-  @include horizontal-toolbar;
+  @extend .horizontal-toolbar;
   position: fixed;
   flex-direction: row;
   justify-content: space-between;
@@ -130,10 +153,6 @@ export default {
     width: 2rem;
     height: 2rem;
   }
-}
-
-.toolbar-left, .toolbar-right {
-  @include horizontal-toolbar;
 }
 
 .toolbar-item {
@@ -163,7 +182,7 @@ export default {
 }
 
 .palette {
-  @include horizontal-toolbar;
+  @extend .horizontal-toolbar;
   padding: .25rem;
   border: 1px solid #fff;
   border-radius: 1rem;
