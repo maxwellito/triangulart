@@ -82,16 +82,27 @@
 
 import downloader from '../../../services/downloader.js'
 import fullscreenHelper from '../../../services/fullscreenHelper.js'
-
-const XLINK_NAMESPACE = 'http://www.w3.org/1999/xlink'
+import Keybinding from '../../../services/keybinding.js'
 
 export default {
   name: 'toolbar',
   props: ['playground'],
   created: function () {
+    this.keybinding = new Keybinding()
     this.palette = this.playground.palette
     this.setFillColor()
     this.setMode('FILL')
+
+    this.keybinding.on('undo', () => {
+      console.log('Hi there, you cheeky listener')
+      this.undo()
+    })
+    this.keybinding.on('copy', () => {
+      console.log('Not implemented yet')
+    })
+  },
+  destroyed: function () {
+    this.keybinding.destroy()
   },
   data () {
     return {
@@ -103,15 +114,12 @@ export default {
   methods: {
     // Actions
     setMode: function (action) {
-      console.log('=='+action,this.playground['ACTION_' + action])
       this.playground.setMode(this.playground['ACTION_' + action])
       this.currentMode = action
     },
     isOnMode: function (action) {
-      console.log('::'+action,this.playground['ACTION_' + action], this.playground.isOnMode(this.playground['ACTION_' + action]))
       return this.playground.isOnMode(this.playground['ACTION_' + action])
     },
-
 
     addColor: function () {
       this.playground.addColor(this.selectedColor)
@@ -123,6 +131,7 @@ export default {
 
     // 
     undo: function () {
+      console.log('UNDOOO')
       this.playground.undo()
     },
     togglePreview: function () {

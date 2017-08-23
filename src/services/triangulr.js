@@ -157,7 +157,7 @@ Triangulr.prototype.createTriangles = function () {
  */
 Triangulr.prototype.generateDom = function () {
   if (this.svgTag) {
-    this.container.appendChild(this.svgTag);
+    this.container.removeChild(this.svgTag);
     this.svgTag.remove();
   }
 
@@ -357,6 +357,7 @@ Triangulr.prototype.import = function (data) {
   );
 
   this.palette = data.palette || []
+  this.backStack.reset()
 
   for (var i in data.mapData) {
     this.exportData[i].color = data.mapData[i];

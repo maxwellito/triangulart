@@ -1,7 +1,7 @@
 <template>
   <label>
     <slot></slot>
-    <input type="file" @change="load($event)" class="hidden"/>
+    <input type="file" @change="load($event)" accept=".json" class="hidden"/>
   </label>
 </template>
 
