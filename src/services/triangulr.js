@@ -3,6 +3,8 @@
 import storage from './storage.js'
 import BackStack from './backStack.js'
 
+const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
+
 /**
  * Triangulr class
  * instructions will follow, in an other commit, it's late now
@@ -164,21 +166,29 @@ Triangulr.prototype.generateDom = function () {
   let svgTag = this.generateSVG(),
       pos = null
   
-  var mouseListener = e => {
-    moveListener(e.offsetX, e.offsetY)
+  // var mouseListener = e => {
+  //   moveListener(e.offsetX, e.offsetY)
+  // }
+
+  // var touchListener = e => {
+  //   e.preventDefault();
+  //   moveListener(e.touches[0].pageX - 16, e.touches[0].pageY - 16)
+  // }
+
+
+  var startActionListener = (e) => {
+    if (this.action === this.ACTION_SELECT &&
+        this.selection && this.selection.coordinates &&
+        childOf(e.target, this.selection.domArea)) {
+      this.selection.dragStart = this.coordinatorFromEvent(e)
+    }
+    else {
+      moveListener(e)
+    }
   }
 
-  var touchListener = e => {
-    // if (!this.isEditing) { //# USE THE ACTION PROPERTY NOW
-    //   return
-    // }
-    e.preventDefault();
-
-    moveListener(e.touches[0].pageX - 16, e.touches[0].pageY - 16)
-  }
-
-  var moveListener = (x, y) => {
-    let position = this.coordinator(x, y)
+  var moveListener = (e) => {
+    let position = this.coordinatorFromEvent(e)
     if (!position || position.index === pos) {
       return
     }
@@ -186,53 +196,96 @@ Triangulr.prototype.generateDom = function () {
 
     switch (this.action) {
     case this.ACTION_FILL:
-      this.backStack.actionStack(pos, this.exportData[pos].color)
-      this.exportData[pos].color = this.color
-      svgTag.childNodes[pos].setAttribute('fill', this.color || this.BLANK_COLOR)
+      this.fillTriangle(pos, this.color)
       break
     
     case this.ACTION_ERASE:
-      this.backStack.actionStack(pos, this.exportData[pos].color)
-      this.exportData[pos].color = null
-      svgTag.childNodes[pos].setAttribute('fill', 'none')
+    this.fillTriangle(pos, null)
       break
     
     case this.ACTION_MOVE:
       break
+
+    case this.ACTION_SELECT:
+      if (this.selection && this.selection.dragStart) {
+        this.updateDrag(position)
+      }
+      else {
+        this.updateSelection(position)
+      }
+      
+      break
     }
-    
-    
-    
   }
 
+  var endActionListener = (e) => {
+    if (this.action === this.ACTION_SELECT) {
+      e.preventDefault();
+      if (this.selection.coordinates) {
+        this.endSelectionMove()
+      }
+      else {
+        this.endSelection()
+      }
+    }
+    this.backStack.endAction()
+    this.saveTimeout()
+  }
+
+
   svgTag.addEventListener('mousedown', (e) => {
+    console.log('CLICK DE PUUUUUTE')
     this.backStack.startAction()
-    mouseListener(e)
-    svgTag.addEventListener('mousemove', mouseListener)
+    startActionListener(e)
+
+    let mouseUpListener = (e) => {
+      svgTag.removeEventListener('mousemove', moveListener)
+      window.removeEventListener('mouseup', mouseUpListener);
+      endActionListener(e)
+    }
+    svgTag.addEventListener('mousemove', moveListener)
+    window.addEventListener('mouseup', mouseUpListener);
   });
 
-  window.addEventListener('mouseup', () => {
-    this.backStack.endAction()
-    svgTag.removeEventListener('mousemove', mouseListener)
-    this.saveTimeout()
-  });
+  
+
+
 
   svgTag.addEventListener('touchstart', (e) => {
     this.backStack.startAction()
-    touchListener(e)
+    startActionListener(e)
+
+    let touchEndListener = (e) => {
+      svgTag.removeEventListener('touchmove', moveListener);
+      window.removeEventListener('touchend', touchEndListener);
+      endActionListener(e)
+    }
+    svgTag.addEventListener('touchmove', moveListener);
+    window.addEventListener('touchend', touchEndListener);
   });
 
-  svgTag.addEventListener('touchend', () => {
-    this.backStack.endAction()
-    this.saveTimeout()
-  });
 
-  svgTag.addEventListener('touchmove', touchListener);
+  
 
   this.svgTag = svgTag;
   this.container.appendChild(svgTag);
   return svgTag;
 };
+
+/**
+ * Call the coordinator from an event
+ * @param event e Mouse or touch event on the svgTag
+ * @return object Triangle information
+ */
+Triangulr.prototype.coordinatorFromEvent = function (e) {
+  if (~e.type.indexOf('mouse')) {
+    return this.coordinator(e.offsetX, e.offsetY)
+  }
+  else {
+    e.preventDefault();
+    return this.coordinator(e.touches[0].pageX - 16, e.touches[0].pageY - 16)
+  }
+}
 
 /**
  * Return the info about a triangle available
@@ -289,6 +342,183 @@ Triangulr.prototype.coordinator = function (x, y) {
     }
 }
 
+Triangulr.prototype.updateSelection = function (position) {
+  if (this.selection && this.selection.coordinates) {
+    this.clearSelection()
+  }
+  if (!this.selection) {
+    this.selection = {
+      start: position,
+      domArea: document.createElementNS(SVG_NAMESPACE, 'rect')
+    }
+    this.selection.domArea.setAttribute('class', 'selector-rect')
+    this.svgTag.appendChild(this.selection.domArea)
+  }
+  this.selection.end = position
+
+  let start = this.selection.start,
+      end = this.selection.end,
+      rect = this.selection.domArea,
+      minX = Math.min(start.x, end.x) * this.blockWidth,
+      maxX = (Math.max(start.x, end.x) + 2) * this.blockWidth,
+      minY = Math.min(start.y, end.y) * this.triangleHeight,
+      maxY = (Math.max(start.y, end.y) + 1) * this.triangleHeight
+
+  if (this.isLandscape) {
+    rect.setAttribute('x', minX)
+    rect.setAttribute('y', minY)
+    rect.setAttribute('width', maxX - minX)
+    rect.setAttribute('height', maxY - minY)
+  }
+  else {
+    rect.setAttribute('x', minY)
+    rect.setAttribute('y', minX)
+    rect.setAttribute('width', maxY - minY)
+    rect.setAttribute('height', maxX - minX)
+  }
+}
+
+Triangulr.prototype.endSelection = function () {
+  if (!this.selection) {
+    return
+  }
+
+  let blank, 
+      blankArea = document.createElementNS(SVG_NAMESPACE, 'g'),
+      clones = document.createElementNS(SVG_NAMESPACE, 'g'),
+      start = this.selection.start,
+      end = this.selection.end,
+      offsetX = Math.min(start.x, end.x),
+      width = Math.max(start.x, end.x) - offsetX + 1,
+      offsetY = Math.min(start.y, end.y),
+      height = Math.max(start.y, end.y) - offsetY + 1
+
+  this.selection.coordinates = {
+    width,
+    height,
+    offsetX,
+    offsetY,
+    moveX: 0,
+    moveY: 0
+  }
+
+  this.indexesFromCoordinates(offsetX, offsetY, width, height)
+    .map(index => {
+      blank = this.svgTag.childNodes[index].cloneNode()
+      clones.appendChild(blank.cloneNode())
+      blank.setAttribute('fill', this.BLANK_COLOR)
+      blankArea.appendChild(blank)
+    })
+
+  clones.appendChild(this.selection.domArea)
+  clones.setAttribute('class', 'movable')
+  this.selection.domArea = clones
+  this.selection.blankArea = blankArea
+  this.svgTag.appendChild(blankArea)
+  this.svgTag.appendChild(clones)
+}
+
+Triangulr.prototype.indexesFromCoordinates = function (x, y, width, height) {
+  if (x < 0 || y < 0 || width < 0 || height < 0 || (x+width) > this.lineLength || (y+height) > this.mapHeight) {
+    throw new Error ('Try to get indexes from invalid coordinates')
+  }
+  let output = []
+  for (let yPos = 0; yPos < height; yPos++) {
+    for (let xPos = 0; xPos < width; xPos++) {
+      output.push((yPos + y) * this.lineLength + xPos + x)
+    }
+  }
+  return output
+}
+
+Triangulr.prototype.endSelectionMove = function () {
+  let coordinates = this.selection.coordinates
+  console.warn(coordinates.moveX, coordinates.moveY)
+  coordinates.moveX += coordinates.dragX
+  coordinates.moveY += coordinates.dragY
+  console.warn(coordinates.moveX, coordinates.moveY)
+  
+}
+
+Triangulr.prototype.updateDrag = function (position) {
+  let coor = this.selection.coordinates,
+      dragX = Math.round((position.x - this.selection.dragStart.x)/2) * 2,
+      dragY = Math.round((position.y - this.selection.dragStart.y)/2) * 2
+
+  if (this.isLandscape) {
+    let newX  = dragX + coor.offsetX + coor.moveX,
+        newY  = dragY + coor.offsetY + coor.moveY
+
+    if (newX >= 0 && (newX + coor.width) <= this.lineLength && newY >= 0 && (newY + coor.height) <= this.mapHeight) {
+      coor.dragX = dragX
+      coor.dragY = dragY
+      this.selection.domArea.style.transform = `translate(${(coor.moveX+dragX)*this.blockWidth}px,${(coor.moveY+dragY)*this.triangleHeight}px)`
+    }
+  }
+  else {
+    [dragX, dragY] = [dragY, dragX]
+    let newX  = dragY + coor.offsetX + coor.moveY,
+        newY  = dragX + coor.offsetY + coor.moveX
+
+    if (newX >= 0 && (newX + coor.width) <= this.lineLength && newY >= 0 && (newY + coor.height) <= this.mapHeight) {
+      coor.dragX = dragX
+      coor.dragY = dragY
+      this.selection.domArea.style.transform = `translate(${(coor.moveX+dragX)*this.triangleHeight}px,${(coor.moveY+dragY)*this.blockWidth}px)`
+    }
+  }
+  
+
+}
+
+Triangulr.prototype.clearSelection = function () {
+  if (!this.selection) {
+    return
+  }
+  this.applySelection()
+  if (this.selection.blankArea) {
+    this.svgTag.removeChild(this.selection.blankArea)
+  }
+  this.svgTag.removeChild(this.selection.domArea)
+  this.selection = null
+}
+
+
+Triangulr.prototype.applySelection = function () {
+  if (!this.selection || !this.selection.coordinates || (!this.selection.coordinates.moveX && !this.selection.coordinates.moveY)) {
+    return
+  }
+  this.backStack.startAction()
+  let c = this.selection.coordinates,
+      colors = this.indexesFromCoordinates(
+        c.offsetX,
+        c.offsetY,
+        c.width,
+        c.height
+      ).map(index => {
+        let cc = this.exportData[index].color
+        this.fillTriangle(index)
+        return cc
+      })
+
+
+  this.indexesFromCoordinates(
+    c.offsetX + (this.isLandscape ? c.moveX : c.moveY),
+    c.offsetY + (this.isLandscape ? c.moveY : c.moveX),
+    c.width,
+    c.height
+  )
+  .forEach((pointIndex, index) => {
+    this.fillTriangle(pointIndex, colors[index])
+  })
+  this.backStack.endAction()
+}
+
+Triangulr.prototype.fillTriangle = function (pos, color) {
+  this.backStack.actionStack(pos, this.exportData[pos].color)
+  this.exportData[pos].color = color
+  this.svgTag.childNodes[pos].setAttribute('fill', color || this.BLANK_COLOR)
+}
+
 /**
  * Generate the SVG map from the information
  * of the instance. An optional boolean is available
@@ -300,7 +530,7 @@ Triangulr.prototype.coordinator = function (x, y) {
  */
 Triangulr.prototype.generateSVG = function (isClean) {
   var i, data, points, polygon;
-  var svgTag = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  var svgTag = document.createElementNS(SVG_NAMESPACE, 'svg');
 
   svgTag.setAttribute('version', '1.1');
   svgTag.setAttribute('preserveAspectRatio', 'xMinYMin slice');
@@ -321,7 +551,7 @@ Triangulr.prototype.generateSVG = function (isClean) {
     if (isClean && !data.color) {
       continue;
     }
-    polygon = document.createElementNS('http://www.w3.org/2000/svg','path');
+    polygon = document.createElementNS(SVG_NAMESPACE,'path');
     points   = 'M' + data.points[0].x + ' ' + data.points[0].y + ' ';
     points  += 'L' + data.points[1].x + ' ' + data.points[1].y + ' ';
     points  += 'L' + data.points[2].x + ' ' + data.points[2].y + ' Z';
@@ -434,14 +664,18 @@ Triangulr.prototype.togglePreview = function () {
  * ACTION_MOVE
  * ACTION_SELECT
  * 
- * Some action require options:
- * ACTION_FILL needs an option object : {color: '#11aaff'}
- * 
  * @param action  number Action index (from triangulr consts)
- * @param options object Extra options when required
  */
 Triangulr.prototype.setMode = function (action) {
-  this.action = action
+  // No effects if the new action is the existing one
+  if (this.action === action) {
+    return
+  }
+  // Apply the selection if there's a seection
+  if (this.action === this.ACTION_SELECT) {
+    this.clearSelection()
+  }
+  this.action = action 
 }
 
 Triangulr.prototype.isOnMode = function (action) {
@@ -468,6 +702,19 @@ Triangulr.prototype.undo = function () {
     this.exportData[fill[0]].color = fill[1]
     this.svgTag.childNodes[fill[0]].setAttribute('fill', fill[1] || 'none')
   }
+}
+
+/**
+ * Found at 
+ * https://stackoverflow.com/questions/2234979/how-to-check-in-javascript-if-one-element-is-contained-within-another
+ * +1 kudo for gitaarLab
+ * @param {DOMElement} c Child node
+ * @param {DOMElement} p Parent Node
+ * @return boolean True if child of
+ */
+function childOf(c, p) {
+  while((c=c.parentNode)&&c!==p); 
+  return !!c; 
 }
 
 export default Triangulr

@@ -45,5 +45,27 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+
+$selector-stroke-dark: #666;
+$selector-stroke-bright: #999;
+
+.movable {
+  cursor: move;
+}
+
+.selector-rect {
+  fill: none;
+  stroke: $selector-stroke-dark;
+  stroke-dasharray: 4px;
+  animation: 1s selector-stroke linear infinite;
+}
+
+@keyframes selector-stroke {
+  0%    {stroke: $selector-stroke-dark; stroke-dashoffset: 0;}
+  49.9% {stroke: $selector-stroke-dark;}
+  50%   {stroke: $selector-stroke-bright;}
+  99.9% {stroke: $selector-stroke-bright;}
+  100%  {stroke: $selector-stroke-dark; stroke-dashoffset: 8px;}
+}
 </style>
