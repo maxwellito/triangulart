@@ -55,7 +55,8 @@ $selector-stroke-bright: #999;
 }
 
 .selector-rect {
-  fill: none;
+  fill: #fff;
+  fill-opacity: 0.01;
   stroke: $selector-stroke-dark;
   stroke-dasharray: 4px;
   animation: 1s selector-stroke linear infinite;

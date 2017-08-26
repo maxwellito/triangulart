@@ -18,8 +18,8 @@ function Triangulr (containerId) {
   }
 }
 
-Triangulr.prototype.DEFAULT_COLOR = '#000';
-Triangulr.prototype.BLANK_COLOR = '#FFF';
+Triangulr.prototype.BGR_COLOR = '#FFF';
+Triangulr.prototype.BLANK_COLOR = 'none';
 Triangulr.prototype.AUTOSAVE_TIMER = 5000;
 
 Triangulr.prototype.ACTION_FILL = 1
@@ -37,7 +37,10 @@ Triangulr.prototype.ACTION_SELECT = 4
  */
 Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandscape) {
   // Save input
-  this.isLandscape = isLandscape;
+  this.isLandscape = isLandscape
+  if (!this.isLandscape) {
+    [width, height] = [height, width]
+  }
   this.mapWidth = width;
   this.mapHeight = height;
 
@@ -51,7 +54,6 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
 
   this.lines = [];
   this.exportData = [];
-  this.pickedColor = this.DEFAULT_COLOR;
 
   this.palette = [];
   this.backStack = new BackStack();
@@ -166,20 +168,10 @@ Triangulr.prototype.generateDom = function () {
   let svgTag = this.generateSVG(),
       pos = null
   
-  // var mouseListener = e => {
-  //   moveListener(e.offsetX, e.offsetY)
-  // }
-
-  // var touchListener = e => {
-  //   e.preventDefault();
-  //   moveListener(e.touches[0].pageX - 16, e.touches[0].pageY - 16)
-  // }
-
-
   var startActionListener = (e) => {
     if (this.action === this.ACTION_SELECT &&
         this.selection && this.selection.coordinates &&
-        childOf(e.target, this.selection.domArea)) {
+        childOf(e.target, this.selection.selectArea)) {
       this.selection.dragStart = this.coordinatorFromEvent(e)
     }
     else {
@@ -200,7 +192,7 @@ Triangulr.prototype.generateDom = function () {
       break
     
     case this.ACTION_ERASE:
-    this.fillTriangle(pos, null)
+    this.fillTriangle(pos)
       break
     
     case this.ACTION_MOVE:
@@ -227,6 +219,7 @@ Triangulr.prototype.generateDom = function () {
       else {
         this.endSelection()
       }
+      this.selection.dragStart = null
     }
     this.backStack.endAction()
     this.saveTimeout()
@@ -349,16 +342,16 @@ Triangulr.prototype.updateSelection = function (position) {
   if (!this.selection) {
     this.selection = {
       start: position,
-      domArea: document.createElementNS(SVG_NAMESPACE, 'rect')
+      selectArea: document.createElementNS(SVG_NAMESPACE, 'rect')
     }
-    this.selection.domArea.setAttribute('class', 'selector-rect')
-    this.svgTag.appendChild(this.selection.domArea)
+    this.selection.selectArea.setAttribute('class', 'selector-rect')
+    this.svgTag.appendChild(this.selection.selectArea)
   }
   this.selection.end = position
 
   let start = this.selection.start,
       end = this.selection.end,
-      rect = this.selection.domArea,
+      rect = this.selection.selectArea,
       minX = Math.min(start.x, end.x) * this.blockWidth,
       maxX = (Math.max(start.x, end.x) + 2) * this.blockWidth,
       minY = Math.min(start.y, end.y) * this.triangleHeight,
@@ -406,13 +399,13 @@ Triangulr.prototype.endSelection = function () {
     .map(index => {
       blank = this.svgTag.childNodes[index].cloneNode()
       clones.appendChild(blank.cloneNode())
-      blank.setAttribute('fill', this.BLANK_COLOR)
+      blank.setAttribute('fill', this.BGR_COLOR)
       blankArea.appendChild(blank)
     })
 
-  clones.appendChild(this.selection.domArea)
+  clones.appendChild(this.selection.selectArea)
   clones.setAttribute('class', 'movable')
-  this.selection.domArea = clones
+  this.selection.selectArea = clones
   this.selection.blankArea = blankArea
   this.svgTag.appendChild(blankArea)
   this.svgTag.appendChild(clones)
@@ -452,7 +445,7 @@ Triangulr.prototype.updateDrag = function (position) {
     if (newX >= 0 && (newX + coor.width) <= this.lineLength && newY >= 0 && (newY + coor.height) <= this.mapHeight) {
       coor.dragX = dragX
       coor.dragY = dragY
-      this.selection.domArea.style.transform = `translate(${(coor.moveX+dragX)*this.blockWidth}px,${(coor.moveY+dragY)*this.triangleHeight}px)`
+      this.selection.selectArea.style.transform = `translate(${(coor.moveX+dragX)*this.blockWidth}px,${(coor.moveY+dragY)*this.triangleHeight}px)`
     }
   }
   else {
@@ -463,7 +456,7 @@ Triangulr.prototype.updateDrag = function (position) {
     if (newX >= 0 && (newX + coor.width) <= this.lineLength && newY >= 0 && (newY + coor.height) <= this.mapHeight) {
       coor.dragX = dragX
       coor.dragY = dragY
-      this.selection.domArea.style.transform = `translate(${(coor.moveX+dragX)*this.triangleHeight}px,${(coor.moveY+dragY)*this.blockWidth}px)`
+      this.selection.selectArea.style.transform = `translate(${(coor.moveX+dragX)*this.triangleHeight}px,${(coor.moveY+dragY)*this.blockWidth}px)`
     }
   }
   
@@ -478,7 +471,7 @@ Triangulr.prototype.clearSelection = function () {
   if (this.selection.blankArea) {
     this.svgTag.removeChild(this.selection.blankArea)
   }
-  this.svgTag.removeChild(this.selection.domArea)
+  this.svgTag.removeChild(this.selection.selectArea)
   this.selection = null
 }
 
@@ -515,8 +508,8 @@ Triangulr.prototype.applySelection = function () {
 
 Triangulr.prototype.fillTriangle = function (pos, color) {
   this.backStack.actionStack(pos, this.exportData[pos].color)
-  this.exportData[pos].color = color
-  this.svgTag.childNodes[pos].setAttribute('fill', color || this.BLANK_COLOR)
+  this.exportData[pos].color = color === undefined ? null : (color || this.exportData[pos].color)
+  this.svgTag.childNodes[pos].setAttribute('fill', this.exportData[pos].color || this.BLANK_COLOR)
 }
 
 /**
