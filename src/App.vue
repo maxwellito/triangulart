@@ -2,7 +2,7 @@
   <div>
     <transition name="fade">
       <launcher v-if="!onPlay" 
-        @loadWorkspaceFile="loadWorkspaceFromFile" 
+        @loadWorkspaceConfig="loadWorkspaceConfig" 
         @newCanvas="newWorkspace" 
         @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
       <workspace v-if="onPlay" :playground="playground"/>
@@ -32,7 +32,7 @@ export default {
     }
   },
   methods: {
-    loadWorkspaceFromFile: function (data) {
+    loadWorkspaceConfig: function (data) {
       this.onPlay = this.playground.loadWorkspaceFromFile(data)
     },
     loadWorkspaceFromStorage: function (id) {

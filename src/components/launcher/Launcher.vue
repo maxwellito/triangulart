@@ -1,7 +1,7 @@
 <template>
   <div class="launcher">
     <transition name="fade">
-      <intro @setView="setView" @loadWorkspaceFile="loadWorkspaceFile" v-if="view === 'intro'"/>
+      <intro @setView="setView" @loadWorkspaceConfig="loadWorkspaceConfig" v-if="view === 'intro'"/>
       <new-canvas-form @newCanvas="newCanvas" @setView="setView" v-if="view === 'create'"/>
       <workspace-browser @loadWorkspaceIndex="loadWorkspaceIndex" @setView="setView" v-if="view === 'workspace'"/>
     </transition>
@@ -30,9 +30,9 @@ export default {
     setView: function (view) {
       this.view = view
     },
-    loadWorkspaceFile: function (data) {
-      console.log('loadWorkspaceFile', data)
-      this.$emit('loadWorkspaceFile', data)
+    loadWorkspaceConfig: function (data) {
+      console.log('loadWorkspaceConfig', data.substr(0,40))
+      this.$emit('loadWorkspaceConfig', data)
     },
     loadWorkspaceIndex: function (data) {
       console.log('loadWorkspaceIndex', data)

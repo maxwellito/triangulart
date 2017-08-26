@@ -1,7 +1,7 @@
 <template>
   <label>
     <slot></slot>
-    <input type="file" @change="load($event)" accept=".json" class="hidden"/>
+    <input type="file" @change="load($event)" accept=".json, .svg" class="hidden"/>
   </label>
 </template>
 
@@ -16,15 +16,11 @@ export default {
       var confReader = new FileReader()
 
       confReader.addEventListener('load', event => {
-        try {
-          var textFile = event.target
-          var config = JSON.parse(textFile.result)
-        }
-        catch (e) {
+        if (!event.target || !event.target.result) {
           this.$emit('error', e)
           return
         }
-        this.$emit('jsonLoaded', config)
+        this.$emit('jsonLoaded', event.target.result)
       })
 
       // Read the text file

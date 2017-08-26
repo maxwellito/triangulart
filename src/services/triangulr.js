@@ -18,9 +18,11 @@ function Triangulr (containerId) {
   }
 }
 
-Triangulr.prototype.BGR_COLOR = '#FFF';
+Triangulr.prototype.BGR_COLOR = '#FFFFFF';
+Triangulr.prototype.DEFAULT_FILL_COLOR = '#000000'
 Triangulr.prototype.BLANK_COLOR = 'none';
 Triangulr.prototype.AUTOSAVE_TIMER = 5000;
+Triangulr.prototype.TRIANGLE_WIDTH = 30
 
 Triangulr.prototype.ACTION_FILL = 1
 Triangulr.prototype.ACTION_ERASE = 2
@@ -35,22 +37,19 @@ Triangulr.prototype.ACTION_SELECT = 4
  * @param  int              height          Triangle height
  * @param  int              triangleHeight  Triangle height
  */
-Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandscape) {
+Triangulr.prototype.setCanvas = function (width, height, isLandscape) {
   // Save input
   this.isLandscape = isLandscape
-  if (!this.isLandscape) {
-    [width, height] = [height, width]
-  }
-  this.mapWidth = width;
-  this.mapHeight = height;
+  this.mapWidth = parseInt(width, 10);
+  this.mapHeight = parseInt(height, 10);
 
-  this.triangleWidth = triangleWidth;
-  this.triangleHeight = Math.sqrt(Math.pow(triangleWidth, 2) - Math.pow(triangleWidth / 2, 2));
+  this.triangleWidth = this.TRIANGLE_WIDTH;
+  this.triangleHeight = Math.sqrt(Math.pow(this.triangleWidth, 2) - Math.pow(this.triangleWidth / 2, 2));
   this.triangleHeight = Math.round(this.triangleHeight);
 
   this.blockWidth = (this.triangleWidth / 2)
   this.blockRatio = this.blockWidth / this.triangleHeight
-  this.lineLength = this.mapWidth * 2 - 1
+  this.lineLength = (this.isLandscape ? this.mapWidth : this.mapHeight) * 2 - 1
 
   this.lines = [];
   this.exportData = [];
@@ -327,6 +326,7 @@ Triangulr.prototype.coordinator = function (x, y) {
       return null
     }
     else {
+      console.info(this.lineLength * line + blockIndex)
       return {
         x: blockIndex,
         y: line,
@@ -527,7 +527,6 @@ Triangulr.prototype.generateSVG = function (isClean) {
 
   svgTag.setAttribute('version', '1.1');
   svgTag.setAttribute('preserveAspectRatio', 'xMinYMin slice');
-
   if (this.isLandscape) {
     svgTag.setAttribute('width', this.mapWidth * this.triangleWidth);
     svgTag.setAttribute('height', this.mapHeight * this.triangleHeight);
@@ -539,7 +538,17 @@ Triangulr.prototype.generateSVG = function (isClean) {
     svgTag.setAttribute('viewBox', '0 0 ' + (this.mapWidth * this.triangleHeight) + ' ' + (this.mapHeight * this.triangleWidth));
   }
 
-  for(i in this.exportData) {
+  // Metadata
+  if (isClean) {
+    svgTag.appendChild(document.createComment(JSON.stringify({
+      isLandscape: this.isLandscape,
+      mapWidth: this.mapWidth,
+      mapHeight: this.mapHeight,
+      palette: this.palette
+    })))
+  }
+
+  for (i in this.exportData) {
     data = this.exportData[i];
     if (isClean && !data.color) {
       continue;
@@ -549,7 +558,9 @@ Triangulr.prototype.generateSVG = function (isClean) {
     points  += 'L' + data.points[1].x + ' ' + data.points[1].y + ' ';
     points  += 'L' + data.points[2].x + ' ' + data.points[2].y + ' Z';
     polygon.setAttribute('d', points);
-    polygon.setAttribute('fill', data.color || this.BLANK_COLOR);
+    if (!isClean || data.color !== this.DEFAULT_FILL_COLOR) {
+      polygon.setAttribute('fill', data.color || this.BLANK_COLOR);
+    }
     polygon.setAttribute('rel', i);
     svgTag.appendChild(polygon);
   }
@@ -575,7 +586,6 @@ Triangulr.prototype.import = function (data) {
   this.setCanvas(
     data.mapWidth,
     data.mapHeight,
-    data.triangleWidth,
     data.isLandscape
   );
 
@@ -595,8 +605,28 @@ Triangulr.prototype.import = function (data) {
 
 
 Triangulr.prototype.loadWorkspaceFromFile = function (data) {
-  console.log('loadWorkspaceFromFile', data)
-  this.import(data)
+  // Check data input (JSON or SVG)
+  let config
+  if (data[0] === '{') {
+    config = JSON.parse(data)
+    config.playground.palette = config.palette
+    config = config.playground
+  }
+  else {
+    let container = document.createElement('div')
+    container.innerHTML = data
+    let svg = container.querySelector('svg')
+    if (!svg || !svg.childNodes[0] || svg.childNodes[0].nodeType !== 8) {
+      throw new Error ('Invalid file format')
+    }
+    config = JSON.parse(svg.childNodes[0].textContent)
+    config.mapData = []
+    svg.querySelectorAll('path').forEach(path => {
+      config.mapData[parseInt(path.getAttribute('rel'), 10)] = path.getAttribute('fill') || this.DEFAULT_FILL_COLOR
+    })
+  }
+
+  this.import(config)
   this.workspace = storage.createItem('imported file')
   storage.updateItem(this.workspace.id, this.export())
   return true
@@ -609,7 +639,10 @@ Triangulr.prototype.loadWorkspaceFromStorage = function (id) {
 }
 Triangulr.prototype.newWorkspace = function (data) {
   console.log('newWorkspace', data)
-  this.setCanvas(data.width, data.height, 30, data.isLandscape);
+  if (!data.isLandscape) {
+    [data.width, data.height] = [data.height, data.width]
+  }
+  this.setCanvas(data.width, data.height, data.isLandscape);
   this.workspace = storage.createItem(data.name || 'untitled')
   storage.updateItem(this.workspace.id, this.export())
   return true

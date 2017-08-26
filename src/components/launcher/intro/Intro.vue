@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     configLoaded: function (data) {
-      console.log('loadWorkspaceConfig', data)
+      console.log('loadWorkspaceConfig', data.substr(0,40))
       this.$emit('loadWorkspaceConfig', data)
     },
     startNew: function () {
