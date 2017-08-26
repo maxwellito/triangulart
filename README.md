@@ -21,6 +21,8 @@ The editor is really basic but does the job pretty well. Unfortunately, many fea
 [-] Touch compatible
 [ ] Universal format (SVG only, no more JSON)
 [ ] Responsive layout
+[ ] Routing
+[ ] Taking care of error cases
 [ ] MASSIVE PERF ISSUES ON BIG WORKSPACE : MOVE TO CANVAS.
 
 
