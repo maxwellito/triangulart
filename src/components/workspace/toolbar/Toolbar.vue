@@ -97,8 +97,8 @@ export default {
       console.log('Hi there, you cheeky listener')
       this.undo()
     })
-    this.keybinding.on('copy', () => {
-      console.log('Not implemented yet')
+    this.keybinding.on('delete', () => {
+      this.playground.eraseSelection()
     })
   },
   destroyed: function () {
@@ -127,6 +127,9 @@ export default {
     setFillColor: function (color) {
       this.selectedColor = color || this.selectedColor
       this.playground.setColor(this.selectedColor)
+      if (!this.playground.isOnMode(this.playground.ACTION_SELECT)) {
+        this.setMode('FILL')
+      }
     },
 
     // 

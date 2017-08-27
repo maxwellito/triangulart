@@ -11,24 +11,24 @@ The editor is really basic but does the job pretty well. Unfortunately, many fea
 [X] Undo
 [X] Selection
 [X] Move selection
-[ ] Fill selection
-[ ] Erase selection
+[X] Fill selection
+[X] Erase selection
 [X] Fullscreen
 [X] Local storage
-[ ] Auto save
+[ ] Auto save (but better)
 [ ] Sevice worker for offline
 [ ] PWA materials
 [-] Touch compatible
-[ ] Universal format (SVG only, no more JSON)
+[X] Universal format (SVG only, no more JSON)
 [ ] Responsive layout
 [ ] Routing
 [ ] Taking care of error cases
+
+## for v2.1
+
 [ ] MASSIVE PERF ISSUES ON BIG WORKSPACE : MOVE TO CANVAS.
+[ ] Zoom in/out
 
-
-### Think about it
-
-[X] Export optimisation by removing `fill="#000000"`
 
 
 
@@ -51,3 +51,11 @@ Here are the details
 
 The SVG first child node is a comment containing the JSON of the basic details of the artwork. It contains the orientation, width, height, and the palette.
 Then every path got the `rel` attribute to contain the triangle index.
+
+
+
+## for v2.1
+
+- MASSIVE PERF ISSUES ON BIG WORKSPACE : MOVE TO CANVAS (and light the weight of triangulart class)
+- Zoom in/out
+- Clipboard!
