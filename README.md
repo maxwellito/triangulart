@@ -24,13 +24,6 @@ The editor is really basic but does the job pretty well. Unfortunately, many fea
 [ ] Routing
 [ ] Taking care of error cases
 
-## for v2.1
-
-[ ] MASSIVE PERF ISSUES ON BIG WORKSPACE : MOVE TO CANVAS.
-[ ] Zoom in/out
-
-
-
 
 ## File format
 
