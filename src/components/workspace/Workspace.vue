@@ -1,5 +1,8 @@
 <template>
-  <toolbar :playground="playground"/>
+  <div>
+    <div ref="playground" class="playground"></div>
+    <toolbar :playground="playground"/>
+  </div>
 </template>
 
 <script>
@@ -16,6 +19,9 @@ export default {
     return {
       foo: 'bar'
     }
+  },
+  mounted: function () {
+    this.playground.setContainer(this.$refs.playground)
   },
   methods: {}
 }

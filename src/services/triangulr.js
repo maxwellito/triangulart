@@ -5,16 +5,9 @@ const SVG_NAMESPACE = 'http://www.w3.org/2000/svg'
 
 /**
  * Triangulr class
- * instructions will follow, in an other commit, it's late now
- *
- * @param  string          containerId      Container DOM id
+ * The magic artbord to manipulate the grid of pixels
  */
-function Triangulr (containerId) {
-  this.container = document.getElementById(containerId)
-  if (!this.container) {
-    throw new Error ('Triangulr container "' + containerId + '" does not exists.')
-  }
-}
+function Triangulr () {}
 
 Triangulr.prototype.BGR_COLOR = '#FFFFFF'
 Triangulr.prototype.DEFAULT_FILL_COLOR = '#000000'
@@ -26,6 +19,21 @@ Triangulr.prototype.ACTION_FILL = 1
 Triangulr.prototype.ACTION_ERASE = 2
 Triangulr.prototype.ACTION_MOVE = 3
 Triangulr.prototype.ACTION_SELECT = 4
+
+/**
+ * Sets the container of the artboard
+ *
+ * @param {DOMElement|string} container Container DOM or it's ID
+ */
+Triangulr.prototype.setContainer = function (container) {
+  if (container.constructor === String) {
+    container = document.getElementById(container)
+  }
+  if (!container) {
+    throw new Error ('Triangulr container "' + containerId + '" does not exists.')
+  }
+  this.container = container
+}
 
 /**
  * Set the canvas properties.
@@ -727,7 +735,7 @@ Triangulr.prototype.loadWorkspaceFromFile = function (data) {
   this.import(config)
   this.workspace = storage.createItem('imported file')
   storage.updateItem(this.workspace.id, this.export())
-  return true
+  return this.workspace
 }
 
 /**
@@ -737,7 +745,7 @@ Triangulr.prototype.loadWorkspaceFromFile = function (data) {
 Triangulr.prototype.loadWorkspaceFromStorage = function (id) {
   this.workspace = {id}
   this.import(storage.getItem(id))
-  return true
+  return this.workspace
 }
 
 /**
@@ -758,7 +766,7 @@ Triangulr.prototype.newWorkspace = function (data) {
   this.setCanvas(data.width, data.height, data.isLandscape);
   this.workspace = storage.createItem(data.name || 'untitled')
   storage.updateItem(this.workspace.id, this.export())
-  return true
+  return this.workspace
 }
 
 /**

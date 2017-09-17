@@ -1,12 +1,12 @@
 <template>
   <div>
-    <transition name="fade">
-      <launcher v-if="!onPlay" 
+    <transition-group name="fade">
+      <launcher key="launcher" v-show="!workspace" 
         @loadWorkspaceConfig="loadWorkspaceConfig" 
         @newCanvas="newWorkspace" 
         @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
-      <workspace v-if="onPlay" :playground="playground"/>
-    </transition>
+      <workspace key="workspace" v-show="workspace" :playground="playground"/>
+    </transition-group>
   </div>
 </template>
 
@@ -26,20 +26,42 @@ export default {
   },
   data () {
     return {
-      onPlay: false,
       workspace: null,
       playground: new Triangulr('playground')
     }
   },
+  created: function () {
+    window.addEventListener('hashchange', () => {
+      let hash = window.location.hash,
+          current
+      if (hash && hash !== '#') {
+        // Go to the page
+        hash = parseInt(hash.substr(1))
+        if (hash && (!this.workspace || this.workspace.id !== hash)) {
+          this.loadWorkspaceFromStorage(hash)
+        }
+      }
+      else {
+        // Go to the home
+        this.workspace = null
+      }
+    })
+  },
   methods: {
     loadWorkspaceConfig: function (data) {
-      this.onPlay = this.playground.loadWorkspaceFromFile(data)
+      this.workspace = this.playground.loadWorkspaceFromFile(data)
+      this.setLocation()
     },
     loadWorkspaceFromStorage: function (id) {
-      this.onPlay = this.playground.loadWorkspaceFromStorage(id)
+      this.workspace = this.playground.loadWorkspaceFromStorage(id)
+      this.setLocation()
     },
     newWorkspace: function (data) {
-      this.onPlay = this.playground.newWorkspace(data)
+      this.workspace = this.playground.newWorkspace(data)
+      this.setLocation()
+    },
+    setLocation: function () {
+      window.location.hash = (this.workspace && this.workspace.id) || ''
     }
   }
 }
