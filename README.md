@@ -21,7 +21,7 @@ The editor is really basic but does the job pretty well. Unfortunately, many fea
 [-] Touch compatible
 [X] Universal format (SVG only, no more JSON)
 [ ] Responsive layout
-[ ] Routing
+[X] Routing
 [ ] Taking care of error cases
 
 

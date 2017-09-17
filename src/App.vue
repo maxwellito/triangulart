@@ -32,20 +32,11 @@ export default {
   },
   created: function () {
     window.addEventListener('hashchange', () => {
-      let hash = window.location.hash,
-          current
-      if (hash && hash !== '#') {
-        // Go to the page
-        hash = parseInt(hash.substr(1))
-        if (hash && (!this.workspace || this.workspace.id !== hash)) {
-          this.loadWorkspaceFromStorage(hash)
-        }
-      }
-      else {
-        // Go to the home
-        this.workspace = null
-      }
+      this.locationCheck()
     })
+  },
+  mounted: function () {
+    this.locationCheck()
   },
   methods: {
     loadWorkspaceConfig: function (data) {
@@ -62,6 +53,20 @@ export default {
     },
     setLocation: function () {
       window.location.hash = (this.workspace && this.workspace.id) || ''
+    },
+    locationCheck: function () {
+      let hash = window.location.hash
+      if (hash && hash !== '#') {
+        // Go to the page
+        hash = parseInt(hash.substr(1))
+        if (hash && (!this.workspace || this.workspace.id !== hash)) {
+          this.loadWorkspaceFromStorage(hash)
+        }
+      }
+      else {
+        // Go to the home
+        this.workspace = null
+      }
     }
   }
 }
