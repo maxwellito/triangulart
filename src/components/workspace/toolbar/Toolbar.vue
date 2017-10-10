@@ -23,7 +23,7 @@
       </svg>
     </div>
 
-    <div class="horizontal-toolbar">
+    <div class="horizontal-toolbar palette-tool">
       <label class="toolbar-item">
         <input type="color" class="color-picker" @change="setFillColor()" v-model="selectedColor"/>
         <svg class="icon">
@@ -228,4 +228,16 @@ export default {
   }
 }
 
+ @media (max-width: 768px) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .palette-tool {
+    width: 100%;
+    order: 10;
+    justify-content: center;
+    margin-top: .5rem;
+  }
+}
 </style>

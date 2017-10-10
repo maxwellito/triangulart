@@ -44,6 +44,12 @@ export default {
 
 <style lang="scss">
 
+.grid-orientation-picker::after {
+  content: '';
+  clear: both;
+  display: block;
+}
+
 .grid-orientation-picker-label {
   margin: 0;
 }

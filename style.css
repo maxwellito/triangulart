@@ -31,6 +31,10 @@ svg path {
   display: none;
 }
 
+.center {
+  text-align: center;
+}
+
 
 /**
  * Component
@@ -83,7 +87,7 @@ svg path {
   outline: none;
 }
 
-.colorlist, .button-group {
+.button-group {
   display: inline-block;
 }
 
@@ -97,15 +101,16 @@ svg path {
   vertical-align: top;
 }
 
-.button-group .button {
-  min-width: 1.5rem;
+.button-group > * {
   border: none;
-  border-right: 1px solid currentColor;
-  vertical-align: top;
+  padding: .25em;
+  font-size: 1rem;
+  border-left: 1px solid currentColor;
+  border-radius: 0;
 }
 
-.button-group .button:last-child {
-  border-right: none;
+.button-group > *:first-child {
+  border-left: none;
 }
 
 .colorlist .button {
@@ -122,23 +127,25 @@ svg path {
  * Layout
  */
 
-.row {
-  display: flex;
-  flex-direction: row;
-  margin: 1rem 0;
-  width: 100%;
-}
+ @media (min-width: 481px) {
+  .row {
+    display: flex;
+    flex-direction: row;
+    margin: 1rem 0;
+    width: 100%;
+  }
 
-.row-inline {
-  align-items: center;
-}
+  .row-inline {
+    align-items: center;
+  }
 
-.row-balanced {
-  justify-content: space-around;
-}
+  .row-balanced {
+    justify-content: space-around;
+  }
 
-.row > * {
-  flex-grow: 1;
+  .row > * {
+    flex-grow: 1;
+}
 }
 
 

@@ -1,5 +1,8 @@
 <template>
   <div class="launcher-content">
+    <div class="nav-actions">
+      <button @click="cancel" class="button">&lt; Back</button>
+    </div>
     <h3 class="row">Choose your saved workspace</h3>
     <div class="row">
       <table class="table workspace-browser-list">
@@ -16,9 +19,6 @@
           </td>
         </tr>
       </table>
-    </div>
-    <div>
-      <button @click="cancel" class="button">Back</button>
     </div>
   </div>
 </template>
@@ -82,6 +82,12 @@ export default {
 
 .workspace-browser-list td * {
   cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .workspace-browser-list-label * {
+    display: block;
+  }
 }
 
 </style>

@@ -10,20 +10,19 @@
       </div>
     </div>
     <div class="row row-balanced">
-      <div class="launcher-action-box">
-        <file-load @jsonLoaded="configLoaded">
-          <svg class="launcher-action-icon"><use xlink:href="#action-import"></use></svg>
-          <span>Upload project</span>
-        </file-load>
-      </div>
+      <file-load @jsonLoaded="configLoaded" class="launcher-action-box">
+        <svg class="launcher-action-icon"><use xlink:href="#action-import"></use></svg>
+        <span>Upload project</span>
+      </file-load>
       <div class="launcher-action-box">
         <svg @click="startNew" class="launcher-action-icon"><use xlink:href="#action-add"></use></svg>
         <span @click="startNew">Start a new canvas</span>
       </div>
       <div class="launcher-action-box">
         <svg @click="loadPrevious" class="launcher-action-icon"><use xlink:href="#action-floppydisk"></use></svg>
-        <span @click="loadPrevious">Load previous project</span> 
-        <span v-if="projectsAvalable" :text-content.prop="projectsAvalable" class="notif"></span>
+        <span @click="loadPrevious">Load previous project 
+          <span v-if="projectsAvalable" :text-content.prop="projectsAvalable" class="notif"></span>
+        </span>
       </div>
     </div>
   </div>
@@ -73,5 +72,15 @@ export default {
   border-right: 1px solid currentColor;
   margin-right: 2rem;
   width: 20%;
+}
+
+@media (max-width: 480px) {
+  .intro-logo {
+    padding-right: 0;
+    border-right: none;
+    margin-right: 0;
+    width: 200px;
+    max-width: 50%;
+  }
 }
 </style>

@@ -1,26 +1,30 @@
 <template>
   <div class="launcher-content">
+    <div class="nav-actions">
+      <button class="button" @click="cancel">&lt; Back</button>
+    </div>
     <div class="row">
-      <label>
+      <label class="new-canvas-field">
         <div class="field">
           <input class="field-input" type="number" v-model="width" min="1"/>
           <span class="field-icon">↔</span>
         </div>
         <span>Map width</span>
       </label>
-      <label>
+      <label class="new-canvas-field">
         <div class="field">
           <input class="field-input" type="number" v-model="height" min="1"/>
           <span class="field-icon">↕</span>
         </div>
         <span>Map height</span>
       </label>
-      <grid-orientation-picker @update:isLandscape="switchOrientation"></grid-orientation-picker>
+      <grid-orientation-picker @update:isLandscape="switchOrientation" class="new-canvas-field"></grid-orientation-picker>
     </div>
-    <div>
-      <input type="text" v-model="name">
-      <button class="button" @click="cancel">Back</button>
-      <button class="button" @click="create">GO!</button>
+    <div class="center">
+      <div class="button-group">
+        <input type="text" v-model="name">
+        <button class="button" @click="create">GO!</button>
+      </div>
     </div>
   </div>
 </template>
@@ -39,7 +43,7 @@ export default {
       width: 30,
       height: 20,
       isLandscape: true,
-      name: 'untitled'
+      name: 'untitled-project'
     }
   },
   methods: {
@@ -76,6 +80,14 @@ export default {
 
 .field-input:active, .field-input:focus{
   outline: none;
+}
+
+@media (max-width: 480px) {
+  .new-canvas-field {
+    display: block;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
 }
 
 </style>

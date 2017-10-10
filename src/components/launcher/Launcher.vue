@@ -48,43 +48,81 @@ export default {
 
 <style lang="scss">
 
-.launcher {
-  position: fixed;
-  left: 0;
-  right: 0;
-
-  z-index: 10;
-  padding: 2rem;
-  width: 100%;
-  height: 100%;
-  max-width: 960px;
-  margin: auto;
-
-  box-sizing: border-box;
-  background-color: #fff;
+.nav-actions {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
 }
 
-.launcher-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+@media (max-width: 480px) {
+  .launcher {
+    padding: 1.5rem;
+  }
 
-  width: 100%;
-  height: 100%;
+  .launcher-action-box {
+    display: flex;
+    align-items: center;
+
+    & + & {
+      margin-top: .5rem;
+    }
+  }
+
+  .launcher-action-icon {
+    width: 48px;
+    min-width: 48px;
+    height: 48px;
+    margin-right: .5rem;
+  }
+
+  .grid-orientation-picker {
+    max-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 
-.launcher-action-box {
-  width: 30%;
-  text-align: center;
-  cursor: pointer;
-}
+@media (min-width: 481px) {
+  .launcher {
+    position: fixed;
+    left: 0;
+    right: 0;
 
-.launcher-action-icon {
-  display: block;
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 1rem;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    max-width: 960px;
+    margin: auto;
+    padding: 2rem;
+
+    box-sizing: border-box;
+    background-color: #fff;
+  }
+
+  .launcher-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  .launcher-action-box {
+    width: 30%;
+    text-align: center;
+    cursor: pointer;
+  }
+
+  .launcher-action-icon {
+    display: block;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 1rem;
+  }
 }
 
 </style>
