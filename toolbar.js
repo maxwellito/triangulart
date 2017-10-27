@@ -81,15 +81,19 @@ Toolbar.prototype.saveFile = function (data, fileName) {
 
 
 Toolbar.prototype.colorButtonListener = function (e) {
-  this.playground.pickedColor = e.target.getAttribute('rel');
+  this.playground.currentColor = this.playground.pickedColor = this.colorInput.value = e.target.getAttribute('rel');
 };
 
 Toolbar.prototype.updateCurrentColor = function (e) {
-  this.playground.pickedColor = this.colorInput.value;
+  this.playground.currentColor = this.playground.pickedColor = this.colorInput.value;
 };
 
 Toolbar.prototype.eraseMode = function (e) {
-  this.playground.pickedColor = null;
+  this.playground.currentColor = null;
+};
+
+Toolbar.prototype.penMode = function (e) {
+  this.playground.currentColor = this.playground.pickedColor;
 };
 
 Toolbar.prototype.addColor = function (color) {
