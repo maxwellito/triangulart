@@ -36,7 +36,7 @@ Triangulr.prototype.setCanvas = function (width, height, triangleWidth, isLandsc
 
   this.lines = [];
   this.exportData = [];
-  this.pickedColor = this.DEFAULT_COLOR;
+  this.currentColor = this.pickedColor = this.DEFAULT_COLOR;
 
   this.lineMapping();
   this.createTriangles();
@@ -147,7 +147,7 @@ Triangulr.prototype.generateDom = function () {
 
   this.color = false;
   svgTag.addEventListener('mousedown', function (e) {
-    this.color = this.pickedColor;
+    this.color = this.currentColor;
     listener(e);
   }.bind(this));
   window.addEventListener('mouseup', function () {
