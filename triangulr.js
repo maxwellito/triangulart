@@ -163,8 +163,20 @@ Triangulr.prototype.generateDom = function () {
     e.target.setAttribute('fill', this.color || this.BLANK_COLOR);
   }.bind(this);
 
+  var touchMoveListener = function (e) {
+    this.color = this.currentColor;
+    var target = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+    if (target === null) { return; }
+    var rel = parseInt(target.getAttribute('rel'), 10);
+    if (this.color === false || isNaN(rel)) { return; }
+    this.exportData[rel].color = this.color;
+    target.setAttribute('fill', this.color || this.BLANK_COLOR);
+    e.preventDefault();
+  }.bind(this);
+
   for(var i = svgTag.childNodes.length - 1; i >= 0; i--) {
     svgTag.childNodes[i].addEventListener('mousemove', listener);
+    svgTag.childNodes[i].addEventListener('touchmove', touchMoveListener);
   }
 
   this.svgTag = svgTag;
