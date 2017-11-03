@@ -238,3 +238,9 @@ Triangulr.prototype.import = function (data) {
 Triangulr.prototype.exportSVG = function () {
   return this.generateSVG(true).outerHTML;
 };
+
+Triangulr.prototype.clearCanvas = function () {
+  for (var i = 0; i < this.svgTag.childNodes.length; i++) {
+    this.svgTag.childNodes[i].setAttribute('fill', this.BLANK_COLOR);
+  }
+};
