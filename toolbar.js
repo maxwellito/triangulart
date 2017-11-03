@@ -79,6 +79,11 @@ Toolbar.prototype.saveFile = function (data, fileName) {
 };
 
 
+Toolbar.prototype.clearCanvas = function(e) {
+  if (confirm("All current work will be destroyed and lost. Be sure you have saved or exported your work.")){
+    this.playground.clearCanvas();
+  }
+};
 
 Toolbar.prototype.colorButtonListener = function (e) {
   this.playground.pickedColor = e.target.getAttribute('rel');
