@@ -4,17 +4,17 @@
       <svg class="toolbar-item icon" @click="setMode('MOVE')" :class="{active: currentMode == 'MOVE'}">
         <title>Move</title>
         <desc>Scroll on the map without editing</desc>
-        <use href="#icon-hand"></use>
+        <use xlink:href="#icon-hand"></use>
       </svg>
       <svg class="toolbar-item icon" @click="setMode('SELECT')" :class="{active: currentMode == 'SELECT'}">
         <title>Select</title>
         <desc>Select an area of triangles to edit them</desc>
-        <use href="#icon-selection"></use>
+        <use xlink:href="#icon-selection"></use>
       </svg>
       <svg class="toolbar-item icon" @click="setMode('FILL')" :class="{active: currentMode == 'FILL'}">
         <title>Pen</title>
         <desc>Fill triangles</desc>
-        <use href="#icon-pen"></use>
+        <use xlink:href="#icon-pen"></use>
       </svg>
       <svg class="toolbar-item icon" @click="setMode('ERASE')" :class="{active: currentMode == 'ERASE'}">
         <title>Eraser</title>

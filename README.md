@@ -24,7 +24,6 @@ The editor is really basic but does the job pretty well. Unfortunately, many fea
 [X] Routing
 [ ] Taking care of error cases
 
-
 ## File format
 
 On the v2, we are making things simpler, one unique file format : the SVG. On the first version the editable format was in JSON, and I think it was a bad design choice. Having one format make it easier for the final user.
@@ -45,9 +44,7 @@ Here are the details
 The SVG first child node is a comment containing the JSON of the basic details of the artwork. It contains the orientation, width, height, and the palette.
 Then every path got the `rel` attribute to contain the triangle index.
 
-
-
-## for v2.1
+## for v2.1 (aka neverland)
 
 - MASSIVE PERF ISSUES ON BIG WORKSPACE : MOVE TO CANVAS (and light the weight of triangulart class)
 - Zoom in/out

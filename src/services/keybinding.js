@@ -62,6 +62,7 @@ class Keybinding {
       if (areSpecsPassing) {
         for (let listenerIndex in this.listeners[eventName]) {
           this.listeners[eventName][listenerIndex]()
+          event.preventDefault()
         }
       }
     }

@@ -248,6 +248,9 @@ Triangulr.prototype.generateDom = function () {
 
   // Touch listeners
   svgTag.addEventListener('touchstart', (e) => {
+    if (this.action === this.ACTION_MOVE) {
+      return
+    }
     this.backStack.startAction()
     startActionListener(e)
 
@@ -273,7 +276,7 @@ Triangulr.prototype.generateDom = function () {
  */
 Triangulr.prototype.coordinatorFromEvent = function (e) {
   if (~e.type.indexOf('mouse')) {
-    return this.coordinator(e.offsetX, e.offsetY)
+    return this.coordinator(e.layerX - 16, e.layerY - 16)
   }
   else {
     e.preventDefault();

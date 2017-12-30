@@ -4,7 +4,7 @@
       <object data="assets/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>
       <div>
         <h1>triangulart</h1>
-        <p>This is a silly graphic editor build in JavaScript to create isometric illustrations.<br>
+        <p>This is a silly graphic editor built in JavaScript to create isometric illustrations.<br>
            Triangulart is like pixel art but for triangles.<br><br>
            Please choose one of the following action</p>
       </div>

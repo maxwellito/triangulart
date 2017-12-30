@@ -1,5 +1,5 @@
 let downloadAnchor = document.createElement('a')
-downloadAnchor.style = 'display: none'
+downloadAnchor.style.display = 'none'
 document.body.appendChild(downloadAnchor)
 
 /**
