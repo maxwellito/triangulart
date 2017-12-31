@@ -276,7 +276,7 @@ Triangulr.prototype.generateDom = function () {
  */
 Triangulr.prototype.coordinatorFromEvent = function (e) {
   if (~e.type.indexOf('mouse')) {
-    return this.coordinator(e.layerX - 16, e.layerY - 16)
+    return this.coordinator(e.pageX - 16, e.pageY - 16)
   }
   else {
     e.preventDefault();

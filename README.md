@@ -16,8 +16,8 @@ The editor is really basic but does the job pretty well. Unfortunately, many fea
 [X] Fullscreen
 [X] Local storage
 [ ] Auto save (but better)
-[ ] Sevice worker for offline
-[ ] PWA materials
+[x] Sevice worker for offline
+[x] PWA materials
 [-] Touch compatible
 [X] Universal format (SVG only, no more JSON)
 [ ] Responsive layout

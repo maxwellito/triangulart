@@ -3,11 +3,33 @@
   <!-- Head (banging?) -->
   <title>triangulart - isometric graphic editor</title>
   <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <link rel="shortcut icon" href="assets/favicon.ico">
+  <meta name="theme-color" content="#f9f9f9">
+
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Add to home screen for Safari on iOS -->
+  <link rel="apple-touch-icon" href="assets/icons/ios-180x180.png">
+  <link rel="apple-touch-startup-image" href="assets/ios-startup/startup-640x1136.png" media="device-width: 375px">
+  <link rel="apple-touch-startup-image" href="assets/ios-startup/startup-1080x1920.png" media="device-width: 414px">
+  <link rel="apple-touch-startup-image" href="assets/ios-startup/startup-640x1136.png" media="(device-width: 320px) and (device-height: 568px)">
+  <link rel="apple-touch-startup-image" href="assets/ios-startup/startup-640x960.png"  media="(device-width: 320px) and (device-height: 480px)">
+
+  <meta name="apple-mobile-web-app-title" content="Triangulart">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+  
+  <meta name="msapplication-TileImage" content="assets/icons/icon-144x144.png">
+  <meta name="msapplication-TileColor" content="#f9f9f9">
 
   <!-- Le style -->
   <link rel="stylesheet" href="style.css" media="screen" charset="utf-8">
-
 </head>
 <body>
 
@@ -137,6 +159,12 @@
 
   <!-- Le script -->
   <script src="/dist/build.js"></script>
+  <script>
+    // Set up service worker
+    // if ('serviceWorker' in navigator) {
+    //   navigator.serviceWorker.register('service-worker.js', {scope: '.'});
+    // }
+  </script>
 
 </body>
 </html>
