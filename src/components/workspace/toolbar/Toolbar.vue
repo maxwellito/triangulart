@@ -24,15 +24,7 @@
     </div>
 
     <div class="horizontal-toolbar palette-tool">
-      <label class="toolbar-item">
-        <input type="color" class="color-picker" @change="setFillColor()" v-model="selectedColor"/>
-        <svg class="icon">
-          <title>Color picker</title>
-          <desc>Pick a new color to use to draw</desc>
-          <use xlink:href="#icon-picker"></use>
-        </svg>
-        <span :style="{background: selectedColor}" class="color-value"></span>
-      </label>
+      <color-picker color="selectedColor" @newColor="setFillColor"/>
       <span class="toolbar-item palette">
         <span @click="addColor()" class="palette-color">+</span>
         <span v-for="color in palette"
@@ -83,10 +75,14 @@
 import downloader from '../../../services/downloader.js'
 import fullscreenHelper from '../../../services/fullscreenHelper.js'
 import Keybinding from '../../../services/keybinding.js'
+import ColorPicker from './ColorPicker.vue'
 
 export default {
   name: 'toolbar',
   props: ['playground'],
+  components: {
+    'color-picker': ColorPicker
+  },
   created: function () {
     this.keybinding = new Keybinding()
     this.palette = this.playground.palette
@@ -125,6 +121,7 @@ export default {
       this.playground.addColor(this.selectedColor)
     },
     setFillColor: function (color) {
+      console.log('>>>>>', color)
       this.selectedColor = color || this.selectedColor
       this.playground.setColor(this.selectedColor)
       if (!this.playground.isOnMode(this.playground.ACTION_SELECT)) {
@@ -184,21 +181,6 @@ export default {
 
 .active {
   color: #1af;
-}
-
-.color-picker {
-  position: relative;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.color-value {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-  vertical-align: super;
-  border-radius: 50%;
 }
 
 .palette {

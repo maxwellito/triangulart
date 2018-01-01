@@ -37,14 +37,4 @@ export default {
   stroke: currentColor;
   stroke-width: 0.25;
 }
-
-.color-picker {
-  height: 1.5rem;
-  padding: 0 0 0 2px;
-  border: none;
-  background: none;
-  border-radius: 2px;
-}
-
-
 </style>
