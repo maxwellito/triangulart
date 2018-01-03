@@ -1,7 +1,7 @@
 <template>
   <div class="launcher-content">
     <div class="row row-inline">
-      <object data="assets/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>
+      <object data="assets/vectors/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>
       <div>
         <h1>triangulart</h1>
         <p>This is a silly graphic editor built in JavaScript to create isometric illustrations.<br>
@@ -45,15 +45,12 @@ export default {
   },
   methods: {
     configLoaded: function (data) {
-      console.log('loadWorkspaceConfig', data.substr(0,40))
       this.$emit('loadWorkspaceConfig', data)
     },
     startNew: function () {
-      console.log('setView', 'create')
       this.$emit('setView', 'create')
     },
     loadPrevious: function () {
-      console.log('setView', 'workspace')
       this.$emit('setView', 'workspace')
     }
   },

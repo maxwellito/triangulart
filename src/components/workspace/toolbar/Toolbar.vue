@@ -24,7 +24,7 @@
     </div>
 
     <div class="horizontal-toolbar palette-tool">
-      <color-picker color="selectedColor" @newColor="setFillColor"/>
+      <color-picker :color="selectedColor" @newColor="setFillColor"/>
       <span class="toolbar-item palette">
         <span @click="addColor()" class="palette-color">+</span>
         <span v-for="color in palette"
@@ -34,8 +34,6 @@
               :class="{'active': color === selectedColor}"
               @click="setFillColor(color)"></span>
       </span>
-
-      <!-- <div class="colorlist" id="color-list"></div> -->
     </div>
 
     <div class="horizontal-toolbar">
@@ -79,18 +77,16 @@ import ColorPicker from './ColorPicker.vue'
 
 export default {
   name: 'toolbar',
-  props: ['playground'],
+  props: ['playground', 'workspace'],
   components: {
     'color-picker': ColorPicker
   },
   created: function () {
     this.keybinding = new Keybinding()
-    this.palette = this.playground.palette
     this.setFillColor()
     this.setMode('FILL')
 
     this.keybinding.on('undo', () => {
-      console.log('Hi there, you cheeky listener')
       this.undo()
     })
     this.keybinding.on('delete', () => {
@@ -108,7 +104,6 @@ export default {
     }
   },
   methods: {
-    // Actions
     setMode: function (action) {
       this.playground.setMode(this.playground['ACTION_' + action])
       this.currentMode = action
@@ -116,22 +111,17 @@ export default {
     isOnMode: function (action) {
       return this.playground.isOnMode(this.playground['ACTION_' + action])
     },
-
     addColor: function () {
       this.playground.addColor(this.selectedColor)
     },
     setFillColor: function (color) {
-      console.log('>>>>>', color)
       this.selectedColor = color || this.selectedColor
       this.playground.setColor(this.selectedColor)
       if (!this.playground.isOnMode(this.playground.ACTION_SELECT)) {
         this.setMode('FILL')
       }
     },
-
-    // 
     undo: function () {
-      console.log('UNDOOO')
       this.playground.undo()
     },
     togglePreview: function () {
@@ -142,6 +132,11 @@ export default {
     },
     downloadSVG: function () {
       downloader(this.playground.exportSVG(), 'artwork.svg');
+    }
+  },
+  watch: {
+    workspace: function () {
+      this.palette = this.playground.palette
     }
   }
 }
@@ -188,6 +183,7 @@ export default {
   padding: .25rem;
   border: 1px solid #fff;
   border-radius: 1rem;
+  margin-left: .5rem;
   box-sizing: border-box;
 }
 

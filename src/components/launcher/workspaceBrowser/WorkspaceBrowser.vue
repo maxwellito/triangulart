@@ -39,7 +39,6 @@ export default {
       this.$emit('setView', 'intro')
     },
     resumeWorkspace: function (id) {
-      console.log('Emitation', id)
       this.$emit('loadWorkspaceIndex', id)
     },
     renameWorkspace: function (item) {

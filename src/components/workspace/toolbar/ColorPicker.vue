@@ -50,6 +50,11 @@ export default {
     clickCapture: function (event) {
       event.stopPropagation()
     },
+  },
+  watch: {
+    color: function (color) {
+      this.selectedColor = {hex: color}
+    }
   }
 }
 </script>

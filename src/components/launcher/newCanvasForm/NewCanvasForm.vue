@@ -48,7 +48,6 @@ export default {
   },
   methods: {
     create: function () {
-      console.log(42)
       this.$emit('newCanvas', {
         width: this.width,
         height: this.height,

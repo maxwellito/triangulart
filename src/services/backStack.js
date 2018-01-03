@@ -53,7 +53,6 @@ BackStack.prototype.endAction = function () {
  */
 BackStack.prototype.popLastAction = function () {
   return this.stack.pop()
-  console.log()
 }
 
 export default BackStack

@@ -18,7 +18,6 @@ class Keybinding {
    * @return function Executable to remove the listener
    */
   on(eventName, listener) {
-    console.log('Listener set')
     if (!EVENTS[eventName]) {
       throw new Error ('Ask to listen for a non existing keybinding')
     }

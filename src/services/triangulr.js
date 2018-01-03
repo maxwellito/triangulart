@@ -179,11 +179,9 @@ Triangulr.prototype.generateDom = function () {
     if (this.action === this.ACTION_SELECT &&
         this.selection && this.selection.coordinates &&
         childOf(e.target, this.selection.selectArea)) {
-      console.log('Drag start')
       this.selection.dragStart = this.coordinatorFromEvent(e)
     }
     else {
-      console.log('NOT Drag start')
       moveListener(e)
     }
   }
@@ -613,6 +611,7 @@ Triangulr.prototype.generateSVG = function (isClean) {
 
   svgTag.setAttribute('version', '1.1')
   svgTag.setAttribute('preserveAspectRatio', 'xMinYMin slice')
+  svgTag.setAttribute('xmlns', SVG_NAMESPACE)
   if (this.isLandscape) {
     svgTag.setAttribute('width', this.mapWidth * this.triangleWidth)
     svgTag.setAttribute('height', this.mapHeight * this.triangleHeight)
@@ -762,7 +761,6 @@ Triangulr.prototype.loadWorkspaceFromStorage = function (id) {
  * @param object data Options to set the new workspace
  */
 Triangulr.prototype.newWorkspace = function (data) {
-  console.log('newWorkspace', data)
   if (!data.isLandscape) {
     [data.width, data.height] = [data.height, data.width]
   }

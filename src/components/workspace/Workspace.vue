@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="playground" class="playground"></div>
-    <toolbar :playground="playground"/>
+    <toolbar :playground="playground" :workspace="workspace"/>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ import Toolbar from './toolbar/Toolbar.vue'
 
 export default {
   name: 'workspace',
-  props: ['playground'],
+  props: ['playground', 'workspace'],
   components: {
     Toolbar
   },

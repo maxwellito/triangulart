@@ -5,7 +5,7 @@
         @loadWorkspaceConfig="loadWorkspaceConfig" 
         @newCanvas="newWorkspace" 
         @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
-      <workspace key="workspace" v-show="workspace" :playground="playground"/>
+      <workspace key="workspace" v-show="workspace" :playground="playground" :workspace="workspace"/>
     </transition-group>
   </div>
 </template>
