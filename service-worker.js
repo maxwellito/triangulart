@@ -3,7 +3,7 @@ var filesToCache = [
   './',
   './style.css',
   './dist/build.js',
-  './assets/triangulart_logo.svg'
+  './assets/vectors/triangulart_logo.svg'
 ];
 
 // Service worker from Google Documentation
