@@ -3,10 +3,9 @@
     <div class="row row-inline">
       <object data="assets/vectors/triangulart_logo.svg" type="image/svg+xml" class="intro-logo"></object>
       <div>
-        <h1>triangulart</h1>
-        <p>This is a silly graphic editor built in JavaScript to create isometric illustrations.<br>
-           Triangulart is like pixel art but for triangles.<br><br>
-           Please choose one of the following action</p>
+        <h1>triangulart <small>[v2 beta]</small></h1>
+        <p>Graphic editor to create isometric illustrations, it's like pixel art but with triangles.<br>
+           Don't forget to share your creation with <a href="https://twitter.com/search?q=%23triangulart">#triangulart</a></p>
       </div>
     </div>
     <div class="row row-balanced">

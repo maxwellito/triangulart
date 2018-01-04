@@ -1,28 +1,10 @@
-# Triangulart
+# triangulart (v2 beta)
 
-Dummy graphic editor to make isometric illustrations. It's like pixel art, but for triangles.
+Dummy graphic editor to make isometric illustrations. It's like pixel art, but with triangles.
 
 Try it on [maxwellito.github.io/triangulart](https://maxwellito.github.io/triangulart)
 
-The editor is really basic but does the job pretty well. Unfortunately, many features are missing: touch screen support, undo, fill, move a group, zoom... 
-
-## v2 is on the way :)
-
-[X] Undo
-[X] Selection
-[X] Move selection
-[X] Fill selection
-[X] Erase selection
-[X] Fullscreen
-[X] Local storage
-[ ] Auto save (but better)
-[x] Sevice worker for offline
-[x] PWA materials
-[-] Touch compatible
-[X] Universal format (SVG only, no more JSON)
-[ ] Responsive layout
-[X] Routing
-[ ] Taking care of error cases
+This version is still on beta and not fully stable.
 
 ## File format
 
@@ -46,6 +28,9 @@ Then every path got the `rel` attribute to contain the triangle index.
 
 ## for v2.1 (aka neverland)
 
+- Auto save (but better, with little signal)
+- Responsive layout (the menu and nav is clunky)
+- Better care of error cases
 - MASSIVE PERF ISSUES ON BIG WORKSPACE : MOVE TO CANVAS (and light the weight of triangulart class)
 - Zoom in/out
 - Clipboard!
