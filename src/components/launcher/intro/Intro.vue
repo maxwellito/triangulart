@@ -6,6 +6,9 @@
         <h1>triangulart <small>[v2 beta]</small></h1>
         <p>Graphic editor to create isometric illustrations, it's like pixel art but with triangles.<br>
            Don't forget to share your creation with <a href="https://twitter.com/search?q=%23triangulart">#triangulart</a></p>
+        <p class="credits">
+          by <a href="https://twitter.com/mxwllt"><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-maxwellito"></use></svg></a> / on <a href="https://github.com/maxwellito/triangulart"><svg class="icon"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#icon-github"></use></svg></a>
+        </p>
       </div>
     </div>
     <div class="row row-balanced">
@@ -68,6 +71,10 @@ export default {
   border-right: 1px solid currentColor;
   margin-right: 2rem;
   width: 20%;
+}
+
+.credits svg {
+  vertical-align: sub;
 }
 
 @media (max-width: 480px) {

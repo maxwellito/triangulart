@@ -137,6 +137,9 @@ export default {
   watch: {
     workspace: function () {
       this.palette = this.playground.palette
+      if (this.palette.length) {
+        this.setFillColor(this.palette[0])
+      }
     }
   }
 }

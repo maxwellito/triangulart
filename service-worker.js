@@ -1,4 +1,4 @@
-var CACHE_NAME = 'triangulart_001';
+var CACHE_NAME = 'triangulart_002';
 var filesToCache = [
   './',
   './style.css',
