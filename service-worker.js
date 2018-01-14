@@ -1,4 +1,6 @@
-var CACHE_NAME = 'triangulart_002';
+var APP_NAME = 'triangulart',
+    APP_VERSION = 2,
+    CACHE_NAME = APP_NAME + '_' + APP_VERSION;
 var filesToCache = [
   './',
   './style.css',
@@ -23,7 +25,7 @@ self.addEventListener('activate', function(event) {
     caches.keys().then(function(cacheNames) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
-          if (CACHE_NAME !== cacheName) {
+          if (cacheName.indexOf(APP_NAME) === 0 && CACHE_NAME !== cacheName) {
             return caches.delete(cacheName);
           }
         })
