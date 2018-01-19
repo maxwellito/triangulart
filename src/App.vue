@@ -1,9 +1,9 @@
 <template>
   <div>
     <transition-group name="fade">
-      <launcher key="launcher" v-show="!workspace" 
-        @loadWorkspaceConfig="loadWorkspaceConfig" 
-        @newCanvas="newWorkspace" 
+      <launcher key="launcher" v-show="!workspace"
+        @loadWorkspaceConfig="loadWorkspaceConfig"
+        @newCanvas="newWorkspace"
         @loadWorkspaceIndex="loadWorkspaceFromStorage"/>
       <workspace key="workspace" v-show="workspace" :playground="playground" :workspace="workspace"/>
     </transition-group>
@@ -52,7 +52,9 @@ export default {
       this.setLocation()
     },
     setLocation: function () {
-      window.location.hash = (this.workspace && this.workspace.id) || ''
+      if (this.workspace && this.workspace.id) {
+        window.location.hash = this.workspace.id
+      }
     },
     locationCheck: function () {
       let hash = window.location.hash
