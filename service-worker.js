@@ -1,5 +1,5 @@
 var APP_NAME = 'triangulart',
-    APP_VERSION = 2,
+    APP_VERSION = 3,
     CACHE_NAME = APP_NAME + '_' + APP_VERSION;
 var filesToCache = [
   './',

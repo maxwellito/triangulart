@@ -61,6 +61,10 @@ export default {
 
 <style lang="scss">
 
+svg.icon {
+  cursor: pointer;
+}
+
 .component-container {
   position: relative;
 }

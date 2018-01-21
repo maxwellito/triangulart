@@ -172,6 +172,7 @@ export default {
 
 .toolbar-item {
   height: 2rem;
+  cursor: pointer;
   & + & {
     margin-left: .5rem;
   }
